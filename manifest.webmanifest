@@ -1,0 +1,16 @@
+{
+  "name": "竞彩预测统计 · 基础版",
+  "short_name": "竞彩统计",
+  "description": "竞彩足球 / 竞彩篮球预测与统计基础版，网页与 App 同源",
+  "lang": "zh-CN",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#070d18",
+  "theme_color": "#070d18",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
