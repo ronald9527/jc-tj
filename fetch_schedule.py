@@ -1272,8 +1272,8 @@ def write_encrypted(obj, path, key):
 
 
 def main():
-    key = site_key()
-    if key is None:
+    cipher_key = site_key()   # 注意：下面循环里的 key 是「销售日键」，不要复用此名
+    if cipher_key is None:
         print('警告：未配置 SITE_PASS，跳过本轮加密输出（保留现有密文，不写明文）')
         return
     now = NOW.strftime('%Y-%m-%d %H:%M:%S')
@@ -1427,7 +1427,7 @@ def main():
     else:
         data = {'status': 'pending', 'kind': '', 'source': '', 'updated_at': '',
                 'upstream_time': '', 'date': '', 'count': 0, 'matches': [], 'probe': probe}
-    write_encrypted(data, OUT, key)
+    write_encrypted(data, OUT, cipher_key)
 
     # history.enc：最近 8 个销售日，供页面按日期切换
     hist = {
@@ -1437,7 +1437,7 @@ def main():
         'day_count': len(days), 'days': days,
         'note': '按竞彩销售日归档；完赛自动回填 results（比分/胜平负/让球胜平负/半全场/总进球/比分玩法 + 中奖奖金）与 settled_at；另含全部玩法奖金、港澳盘口、情报强弱模型（intel）、市场模型（market）与串关精选（parlay_recs），供 6 个 Tab 按日期切换查看历史。',
     }
-    write_encrypted(hist, HIST, key)
+    write_encrypted(hist, HIST, cipher_key)
     print('已写出加密 data.enc 与 history.enc（%d 个日期，密码未落盘）' % len(days))
 
 
