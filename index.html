@@ -476,10 +476,13 @@ async function doLogin(){
     else sessionStorage.setItem(AUTH_SESS,JSON.stringify(payload));
     hideGate();
     await loadEncrypted(key,true);
-    if(location.hash==='#confirm')setTimeout(()=>{const c=document.getElementById('confirm');if(c)c.scrollIntoView();},120);
+    try{
+      if(location.hash==='#confirm')setTimeout(()=>{
+        const c=document.getElementById('confirm');if(c&&c.scrollIntoView)c.scrollIntoView();
+      },120);
+    }catch(e){}
   }catch(e){
     clearAuth();
-    err.textContent='账号或密码不正确，或数据尚未生成，请重试';
     showGate('账号或密码不正确，或数据尚未生成，请重试');
   }finally{
     btn.disabled=false;btn.textContent='解锁进入';
@@ -611,7 +614,7 @@ function playPanel(x){
   return h;
 }
 function cardSchedule(d){
-  // 优先用按销售日归档的 history.json（含历史赛果）；没有才退回当天 data.json
+  // 优先用解密后的按销售日归档 history.enc；没有才退回当天 data.enc
   const days=(HIST&&HIST.days)||[];
   const useHist=state.sport==='football' && days.length>0;
   const live=state.sport==='football' && LIVE && LIVE.status==='ok' && (LIVE.matches||[]).length;
@@ -703,7 +706,7 @@ function hkRow(it){
   if(it.t==='text')return '<div class="hkrow"><span>'+it.k+'</span><b>'+it.f+' → '+it.c+'</b></div>';
   return '<div class="hkrow"><span>'+it.k+'</span><b>'+oddsF(it.f)+' → '+oddsF(it.c)+'</b>'+hkTrend(it.t)+'</div>';
 }
-// 6 个 Tab 共用同一份按销售日归档的历史（history.json 优先，data.json 兜底）
+// 6 个 Tab 共用同一份解密后的按销售日归档历史（history.enc 优先，data.enc 兜底）
 function commonDays(){
   const days=(HIST&&HIST.days)||[];
   if(days.length)return days;
@@ -735,7 +738,7 @@ function tabEmpty(title,why){
 function hkDays(){
   const has=m=>m&&m.hkmo&&Object.keys(m.hkmo).length;
   const days=commonDays();
-  // 历史文件带盘口就直接用；若是旧缓存（不含 hkmo），退回当天 data.json
+  // 历史文件带盘口就直接用；若是旧缓存（不含 hkmo），退回当天解密数据
   if(days.some(d=>(d.matches||[]).some(has)))return days;
   const ms=(LOCAL&&LOCAL.matches)||[];
   if(ms.some(has))return [{date:(LOCAL&&LOCAL.date)||'今天',weekday:'',label:'今天',
@@ -1222,7 +1225,7 @@ if('serviceWorker' in navigator && /^https:|^http:\/\/localhost/.test(location.p
 
 render();
 
-// 数据双通道：① GitHub Actions 每天写入的 data.json ② 本机直连竞彩官方网关
+// 数据双通道：① GitHub Actions 每天写入的加密 data.enc（登录后解密） ② 本机直连竞彩官方网关
 // 官方网关拒绝云服务器 IP，但普通手机/家庭网络通常可直连，所以两头都试。
 const OFFICIAL_URL='https://webapi.sporttery.cn/gateway/jc/football/getMatchCalculatorV1.qry?poolCode=hhad,had&channel=c';
 function parseOfficial(j){
