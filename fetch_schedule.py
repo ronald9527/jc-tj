@@ -33,6 +33,15 @@ YEAR = NOW.year
 DAYS = 10                     # 含今天，往前 9 天（滚动窗口不挤掉展示过的历史）
 SOURCE = '500彩票网竞彩足球（国内数据）'
 
+SP_NOTE = (
+    '本页串关与赛果计算一律使用「竞彩官方固定奖金 SP」（胜/平/负），'
+    '它与「澳门/香港/平均欧赔等博彩公司赔率」是两套不同数字，欧赔只用于离散度与盘口分析，'
+    '不参与串关组合赔率、中奖奖金、回报计算。竞彩 SP 在销售期内会随投注量调整，'
+    '停售后锁定为最终派奖值；已完赛场次显示锁定值，未开赛场次显示为抓取时快照，'
+    '不同时间打开数字可能不同。历史销售日的串关是按最终锁定 SP 做的回溯模拟，'
+    '不是当时若发出推荐时的 SP，回报仅用于检验模型，不代表实盘派奖。'
+)
+
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
     'Accept': 'text/html,application/xhtml+xml,*/*; q=0.01',
@@ -1105,6 +1114,8 @@ def build_parlay_recs(day_matches, all_rows):
                 'num': r.get('num', ''), 'lg': r.get('lg', ''),
                 'match': '%s vs %s' % (r.get('h', ''), r.get('a', '')),
                 'sel': lg['sel'], 'odds': lg['odds'],
+                'sp_locked': bool(r.get('sp_locked')),
+                'sp_note': r.get('sp_note') or '',
                 'book_implied': lg['book'], 'poisson': lg['pois'],
                 'synth': lg['prob'], 'why': lg['why'],
                 'ev': lg['ev'], 'quality': lg['quality'],
@@ -1167,6 +1178,9 @@ def build_parlay_recs(day_matches, all_rows):
         'pool': len(pool), 'qualified': len(ordered),
         'pending': len(pending), 'finished': len(finished),
         'generated_at': NOW.strftime('%Y-%m-%d %H:%M:%S (北京时间)'),
+        'odds_note': SP_NOTE,
+        'odds_source': '竞彩官方固定奖金 SP（胜/平/负），非博彩公司欧赔',
+        'sp_floating': True,
         'odds_band': '单腿赔率 1.40–2.80：排除 1.1~1.3 的超低赔稳胆，也排除纯博冷',
         'quality_rule': ('硬门槛：综合概率 ≥38%、市场隐含 ≥26%、离散 CV ≤10、≥2 条真实信号'
                          '（凯利寻胆 / 同指 / 泊松首位 / 离散低 / 港澳同步降水）、模型与盘口不相反。'
@@ -1423,6 +1437,23 @@ def main():
     print('情报/强弱模型：联赛页 %d 个 · 详情页 %d 场 · 有真实因素的场次 %d/%d'
           % (len(standings), len(details), intel_hit, len(all_rows)))
 
+    # 赔率口径标注：竞彩官方 SP 在销售期内浮动、停售后锁定；
+    # 与「6 家博彩公司欧赔」是两套数字，不能混为一谈。
+    for d in days:
+        for m in d['matches']:
+            o = m.get('odds') or {}
+            vals = [o.get('h'), o.get('d'), o.get('a')]
+            has = all(isinstance(v, (int, float)) and v > 1 for v in vals)
+            finished = bool(m.get('result')) or ('完' in str(m.get('st') or ''))
+            m['sp_available'] = has
+            m['sp_locked'] = finished
+            m['sp_snapshot_at'] = now + ' (北京时间)'
+            m['sp_note'] = (
+                '官方未开售胜平负，本场无竞彩 SP' if not has else
+                ('停售/完赛，SP 已锁定为最终派奖值' if finished else
+                 '销售期内，官方 SP 仍会随投注量调整，停售后才锁定'))
+        d['odds_note'] = SP_NOTE
+
     # 庄家视角 / 离散 / 凯利 / 泊松 / 历史同指 / 五维雷达 + 2串1~4串1 精选
     market_hit = 0
     for d in days:
@@ -1444,7 +1475,7 @@ def main():
             'status': 'ok', 'kind': 'domestic', 'source': SOURCE,
             'updated_at': now + ' (北京时间)', 'upstream_time': '',
             'date': TODAY, 'count': len(today_rows), 'matches': today_rows,
-            'parlay_recs': recs, 'probe': probe,
+            'parlay_recs': recs, 'probe': probe, 'odds_note': SP_NOTE,
             'note': '国内 500 彩票网；完赛后自动回填全场比分/胜平负/让球胜平负/半全场/总进球/比分赛果及对应官方奖金；全部玩法固定奖金 + 港澳盘口 + 情报强弱模型 + 庄家视角指标 + 2串1~4串1 精选，按销售日归档供 6 个 Tab 共享历史。',
         }
     elif prev.get('matches'):
@@ -1457,11 +1488,12 @@ def main():
                 'upstream_time': '', 'date': '', 'count': 0, 'matches': [], 'probe': probe}
     write_encrypted(data, OUT, cipher_key)
 
-    # history.enc：最近 8 个销售日，供页面按日期切换
+    # history.enc：最近 DAYS 个销售日，供页面按日期切换
     hist = {
         'status': 'ok' if days else 'pending',
         'kind': 'domestic', 'source': SOURCE,
         'updated_at': now + ' (北京时间)',
+        'odds_note': SP_NOTE,
         'day_count': len(days), 'days': days,
         'note': '按竞彩销售日归档；完赛自动回填 results（比分/胜平负/让球胜平负/半全场/总进球/比分玩法 + 中奖奖金）与 settled_at；另含全部玩法奖金、港澳盘口、情报强弱模型（intel）、市场模型（market）与串关精选（parlay_recs），供 6 个 Tab 按日期切换查看历史。',
     }
