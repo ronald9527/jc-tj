@@ -31,6 +31,9 @@ jobs:
       - name: 安装加密依赖
         run: python3 -m pip install --quiet cryptography
 
+      - name: 抓取竞彩篮球赛程 / 赔率 / 赛果并加密输出
+        run: python3 fetch_basketball.py
+
       - name: 抓取最近 10 个销售日的赛程与赛果并加密输出
         run: python3 fetch_schedule.py
 
@@ -40,10 +43,10 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           # 明文数据文件若因任何原因出现，一律不入库
           rm -f data.json history.json
-          if git diff --quiet -- data.enc history.enc; then
+          if git diff --quiet -- data.enc history.enc basketball.enc; then
             echo "加密数据无变化，跳过提交"
           else
-            git add data.enc history.enc
+            git add data.enc history.enc basketball.enc
             git commit -m "自动更新加密赛程与历史赛果 $(date -u +%Y-%m-%dT%H:%MZ)"
             git pull --rebase origin main
             git push
@@ -67,4 +70,10 @@ jobs:
               five=sum(1 for m in x['matches'] if m.get('settled') and m.get('result_bqc') and m.get('result_jqs'))
               print('  %s %s %d 场，含赛果 %d 场，自动回填 %d 场（五项齐全 %d 场）%s'%(
                     x['date'],x.get('weekday',''),x['count'],done,settled,five,x.get('num_span','')))
+          PY
+          b=safe_load('basketball.enc')
+          if b and b.get('days'):
+              s=sum(len(v.get('matches',[])) for v in b['days'].values())
+              r=sum(1 for v in b['days'].values() for m in v.get('matches',[]) if m.get('settled'))
+              print('篮球：%d 场已抓取，其中 %d 场已开奖 | 更新 %s'%(s,r,b.get('updated_at')))
           PY
