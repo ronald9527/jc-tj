@@ -31,7 +31,7 @@ jobs:
       - name: 安装加密依赖
         run: python3 -m pip install --quiet cryptography
 
-      - name: 抓取 8 个销售日的赛程与赛果并加密输出
+      - name: 抓取最近 10 个销售日的赛程与赛果并加密输出
         run: python3 fetch_schedule.py
 
       - name: 有变化才提交，自动触发 Pages 重新发布
