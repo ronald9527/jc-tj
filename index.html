@@ -167,6 +167,17 @@ main{padding:0 18px}
 .settleline{margin-top:7px;padding:6px 8px;border-radius:7px;background:rgba(57,214,168,.08);color:#9fe9d0;font-size:10px;line-height:1.7;border:1px solid rgba(57,214,168,.22)}
 .settleline b{color:#39d6a8}
 .backnote{margin:2px 0 10px;padding:8px 10px;border-radius:9px;background:rgba(43,125,233,.12);color:#9cc4ff;font-size:10px;line-height:1.7;border:1px solid rgba(43,125,233,.3)}
+details.oddsnote{margin:2px 0 10px;border:1px solid rgba(255,181,71,.4);border-radius:9px;background:rgba(255,181,71,.09);padding:8px 10px}
+details.oddsnote summary{cursor:pointer;font-size:11px;font-weight:800;color:#ffc970;list-style:none;line-height:1.5}
+details.oddsnote summary::-webkit-details-marker{display:none}
+details.oddsnote summary:after{content:' ▾'}
+details.oddsnote[open] summary:after{content:' ▴'}
+.onbody{margin-top:7px;font-size:10px;color:#c9d8ef;line-height:1.85}
+.onrow{padding:3px 0;border-bottom:1px dashed rgba(255,181,71,.22)}
+.onrow b{color:#ffc970;margin-right:6px}
+.mini.spnote{margin-top:4px;color:#8fa6c8;font-size:9px;opacity:.9}
+.spnone{margin-top:7px;padding:7px 8px;border-radius:7px;background:rgba(255,139,149,.08);color:#ff9aa3;font-size:10px;border:1px solid rgba(255,139,149,.25)}
+
 .valuebar{margin-top:9px;padding:7px 9px;border-radius:8px;background:rgba(43,125,233,.12);color:#9cc4ff;font-size:10px;font-weight:700;line-height:1.7;border:1px solid rgba(43,125,233,.3)}
 .valuebar.off{background:rgba(255,181,71,.1);color:#ffc970;border-color:rgba(255,181,71,.3)}
 .valuebar b{color:#fff;font-size:13px}
@@ -862,8 +873,9 @@ function cardStrength(d){
 }
 function pickedList(){
   return Object.keys(state.picks).filter(k=>state.picks[k]&&k.split('|').length===4).map(k=>{
-    const p=k.split('|');return {key:k,o:parseFloat(p[3])||1,sel:p[2],num:p[1]};
-  });
+    const p=k.split('|'),o=parseFloat(p[3]);
+    return {key:k,o:(o&&o>1)?o:1,sel:p[2],num:p[1]};
+  }).filter(x=>x.o>1);
 }
 function odds3(o){
   return oddsF(o&&o.h)+' / '+oddsF(o&&o.d)+' / '+oddsF(o&&o.a);
@@ -881,15 +893,18 @@ function marketPanel(x){
   const co=m.companies||{}, disp=m.dispersion||{}, kel=m.kelly||{},
         pois=m.poisson||{}, rad=m.radar||{}, dif=m.diff||{}, hk=x.hkmo||{};
   let h='<details class="mkt"><summary>查看模型指标与全量信号</summary><div class="mkbody">';
-  h+='<div class="mktitle">当前赔率</div>';
-  h+=mkRow('竞彩官方 胜/平/负',odds3(x.odds));
+  h+='<div class="mktitle">① 竞彩官方固定奖金 SP（本页串关用这个）</div>';
+  h+=mkRow('胜/平/负',odds3(x.odds));
+  h+=mkRow('让球胜/平/负',odds3(x.odds_rq));
+  h+='<div class="mini spnote">'+(x.sp_note||(x.result?'🔒 已完赛 · SP 已锁定为最终派奖值':'⏱ 销售期快照 · 官方 SP 停售前仍会调整'))+'</div>';
+  h+='<div class="mktitle">② 博彩公司欧赔（非竞彩奖金，不参与串关计算）</div>';
   const e1=((hk['澳门']||{}).eu)||[], e2=((hk['香港']||{}).eu)||[];
-  if(e1.length)h+=mkRow('澳门当前欧赔',e1.map(i=>i.c).join(' / '));
-  if(e2.length)h+=mkRow('香港当前欧赔',e2.map(i=>i.c).join(' / '));
+  if(e1.length)h+=mkRow('澳门欧赔 · 当前',e1.map(i=>i.c).join(' / '));
+  if(e2.length)h+=mkRow('香港欧赔 · 当前',e2.map(i=>i.c).join(' / '));
   h+=mkRow('庄家水位 ∑1/奖金',m.book_overround||'—');
   const ks=Object.keys(co);
   if(ks.length){
-    h+='<div class="mktitle">6 家公司赔率 · 离散数据</div>'+
+    h+='<div class="mktitle">6 家公司欧赔 · 离散数据（与竞彩 SP 不同源）</div>'+
        '<div class="fact head"><span>公司</span><b>胜</b><b>平</b><b>负</b></div>'+
        ks.map(k=>'<div class="fact"><span>'+k+'</span><b>'+oddsF(co[k].h)+'</b><b>'+oddsF(co[k].d)+'</b><b>'+oddsF(co[k].a)+'</b></div>').join('');
   }
@@ -949,12 +964,12 @@ function recCard(k,v,meta){
      ' · 目标带 '+band+(v.combo_ok?' ✓ 达标':' · 略超带（达标候选不足未校准）')+
      ' · 平均价值 <b>'+v.avg_ev+'</b> · 平均质量 <b>'+v.avg_quality+'</b></div>';
   h+='<div class="rechit'+hcls+'">'+v.hit_icon+' <b>'+k+' · '+v.parlay_hit+'</b> · '+v.hit_note+
-     (v.return_2yuan?' · 2 元本金回报 <b>¥'+(+v.return_2yuan).toFixed(2)+'</b>（组合赔率 '+(+v.combo_odds).toFixed(2)+'）':'')+'</div>';
+     (v.return_2yuan?' · 按锁定 SP 计算 2 元回报 <b>¥'+(+v.return_2yuan).toFixed(2)+'</b>（组合赔率 '+(+v.combo_odds).toFixed(2)+'，非实盘派奖）':'')+'</div>';
   v.legs.forEach((l,i)=>{
     h+='<div class="recleg"><b>第 '+(i+1)+' 腿 · '+l.num+'</b> '+l.lg+' · '+l.match+' '+legHitBadge(l)+'</div>'+
        '<div class="recchain">选 <b>'+l.sel+'</b> → 实际 <b>'+(l.result||'待回填')+'</b>'+
        (l.full?'（全场 '+l.full+(l.half?' · 半场 '+l.half:'')+'）':'')+'</div>'+
-       '<div class="recpick"><span>当前赔率 <b>'+(+l.odds).toFixed(2)+'</b></span>'+
+       '<div class="recpick"><span>竞彩官方 SP <b>'+oddsF(l.odds)+'</b></span>'+
        '<span>综合 <b>'+l.synth+'%</b></span>'+
        (l.sel_prize?'<span>'+(l.hit===true?'中奖奖金':'该选项奖金（未中）')+' <b>'+(+l.sel_prize).toFixed(2)+'</b></span>':'')+'</div>'+
        '<div class="qrow">价值分 <b>'+l.ev+'</b>（每 1 元期望回报）· 质量分 <b>'+l.quality+'</b>'+
@@ -966,12 +981,26 @@ function recCard(k,v,meta){
     }else{
       h+='<div class="miniline">⏳ 未开赛；完赛后自动回填六项赛果，并按「所选选项 vs 实际胜平负」判定命中</div>';
     }
-    h+='<div class="mini">奖金隐含 '+l.book_implied+'% · 泊松 '+l.poisson+'% · 依据 '+l.why.join('、')+'</div>';
+    h+='<div class="mini">奖金隐含 '+l.book_implied+'% · 泊松 '+l.poisson+'% · 依据 '+l.why.join('、')+'</div>'+
+       '<div class="mini spnote">'+((l.sp_locked===true||!!l.full)?'🔒 SP 已锁定（停售最终值）':'⏱ 销售期快照，SP 仍可能调整')+
+       (l.sp_note?' · '+l.sp_note:(l.full?' · 已完赛，按最终派奖 SP':' · 未开赛，SP 停售前仍会调整'))+'</div>';
   });
   h+='<div class="recalc">组合赔率 <b>'+(+v.combo_odds).toFixed(2)+'</b> · 联合概率 <b>'+v.joint_prob+'%</b> · 期望指数 <b>'+v.ev+'</b></div>'+
      '<div class="mini note">置信依据：平均质量 '+(v.avg_quality||'—')+' · 平均综合概率 '+(v.avg_synth||'—')+'% · 平均离散 CV '+v.avg_cv+'% · '+v.note+'</div>'+
      '<div class="mini note">'+(meta.ev_note||'')+'</div></div>';
   return h;
+}
+const ODDS_NOTE_DEFAULT='本页串关与赛果计算一律使用「竞彩官方固定奖金 SP」（胜/平/负）。它与澳门/香港/平均欧赔等博彩公司赔率是两套不同数字，欧赔只用于离散度与盘口分析，不参与串关组合赔率、中奖奖金、回报计算。竞彩 SP 在销售期内会随投注量调整，停售后锁定为最终派奖值；已完赛场次显示锁定值，未开赛场次为抓取时快照。历史销售日的串关是按最终锁定 SP 做的回溯模拟，不是当时若发出推荐时的 SP。';
+function oddsNote(txt){
+  txt=txt||ODDS_NOTE_DEFAULT;
+  if(!txt)return '';
+  return '<details class="oddsnote" open><summary>⚠ 赔率口径：竞彩 SP ≠ 欧赔（务必看清）</summary>'+
+    '<div class="onbody">'+txt+
+    '<div class="onrow"><b>本页用</b>竞彩官方固定奖金 SP → 串关组合赔率 / 中奖奖金 / 回报</div>'+
+    '<div class="onrow"><b>不参与计算</b>澳门 / 香港 / 平均欧赔等博彩公司赔率，只用于离散度与盘口分析</div>'+
+    '<div class="onrow"><b>会变动</b>销售期内 SP 随投注量调整，停售后锁定；不同时间打开数字可能不同</div>'+
+    '<div class="onrow"><b>历史回溯</b>按最终锁定 SP 重算，不是当时若发出推荐时的 SP</div>'+
+    '</div></details>';
 }
 function qualityNote(meta){
   const t=meta.combo_target||{}, c=meta.combo_cap||{};
@@ -1022,6 +1051,7 @@ function cardParlay(d){
         '（未开赛 '+(meta.pending||0)+' · 已完赛 '+(meta.finished||0)+'）'+
         (meta.generated_at?' · 生成于 '+meta.generated_at:'')+'</div>';
   html+=qualityNote(meta);
+  html+=oddsNote(meta.odds_note||((HIST&&HIST.odds_note)||((LOCAL&&LOCAL.odds_note)||'')));
   html+='<div class="mini note">'+(meta.basis||'')+'。'+(meta.disclaimer||'')+'</div>';
   html+='<div class="backnote">📌 '+(meta.backtest_note||'每腿按所选选项与实际胜平负赛果判定命中 / 未命中，串关须全部腿命中才算全中。')+'</div>';
   ['2串1','3串1','4串1'].forEach(k=>{html+=recCard(k,recs[k],meta);});
@@ -1033,22 +1063,23 @@ function cardParlay(d){
       '<span class="lg">'+x.lg+'</span><span class="tm">'+x.date+(x.time?' '+x.time:'')+'</span>'+
       (x.full?'<span class="scorebig" style="font-size:14px">'+x.full+'</span>':'')+'</div>'+
       '<div class="vs" style="font-size:13px;margin:5px 0 2px">'+x.h+' <span style="color:#6d83a5">vs</span> '+x.a+'</div>'+
-      '<div class="recpick"><span>当前 胜 <b>'+oddsF(o.h)+'</b></span><span>平 <b>'+oddsF(o.d)+'</b></span><span>负 <b>'+oddsF(o.a)+'</b></span></div>'+
+      '<div class="recpick"><span>竞彩 SP 胜 <b>'+oddsF(o.h)+'</b></span><span>平 <b>'+oddsF(o.d)+'</b></span><span>负 <b>'+oddsF(o.a)+'</b></span></div>'+
+      '<div class="mini spnote">'+(x.sp_note||(x.result?'🔒 已完赛 · SP 已锁定为最终派奖值':'⏱ 销售期快照 · 官方 SP 停售前仍会调整'))+'</div>'+
       parlayLegSummary(x,recs)+
       settleLine(x)+
       settledBlock(x,true)+
       marketPanel(x)+
-      '<div class="picks3">'+['胜','平','负'].map((sel,i)=>{
-        const ov=[o.h,o.d,o.a][i], key=[t.cur.date,x.num||'',sel,(ov||0).toFixed(2)].join('|');
+      (o.h&&o.d&&o.a?('<div class="picks3">'+['胜','平','负'].map((sel,i)=>{
+        const ov=[o.h,o.d,o.a][i], key=[t.cur.date,x.num||'',sel,(+ov).toFixed(2)].join('|');
         const hit=x.result?(x.result===sel):null;
         return '<label class="pick '+(state.picks[key]?'on':'')+'" style="display:block;text-align:center;padding:7px 2px;border:1px solid #1e314c;border-radius:8px">'+
           '<input type="checkbox" data-pick="'+key+'" '+(state.picks[key]?'checked':'')+' style="display:none">'+
           '<b style="font-size:12px">'+sel+'</b><small>'+(ov?(+ov).toFixed(2):'—')+'</small>'+
           (hit===true?'<small style="color:#39d6a8">✓ 命中</small>':(hit===false?'<small style="color:#ff8b95">✗ 未中</small>':''))+'</label>';
-      }).join('')+'</div></div>';
+      }).join('')+'</div>'):'<div class="mini spnone">⚠ 官方未开售胜平负，本场无可勾选 SP</div>')+'</div>';
   });
   const picked=pickedList(), mult=picked.reduce((a,b)=>a*b.o,1), ret=(state.stake*mult).toFixed(2);
-  html+='<div class="calc"><div>自选已勾 <b>'+picked.length+'</b> 项 · 组合赔率 <b>'+mult.toFixed(2)+'</b>（按当前奖金）</div>'+
+  html+='<div class="calc"><div>自选已勾 <b>'+picked.length+'</b> 项 · 组合赔率 <b>'+mult.toFixed(2)+'</b>（按竞彩官方 SP，非欧赔）</div>'+
     '<div class="stake">本金 <input id="stake" type="number" min="2" step="2" value="'+state.stake+'"> 元</div>'+
     '<div class="ret">预估回报 <b>¥'+ret+'</b></div></div>';
   return html;
