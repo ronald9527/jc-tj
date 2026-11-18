@@ -1,22 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-每日自动抓取「竞彩篮球赛程 + 赔率 + 赛果」，加密输出 basketball.enc。
-纯标准库，GitHub Actions 直接跑，0 元、免 key、无需服务器。
-
-数据源：500 彩票网竞彩篮球页（国内）。
-  https://trade.500.com/jclq/?playid=313&g=2&date=YYYY-MM-DD   胜负/让分/大小/胜分差
-  https://live.500.com/jclq.php?e=YYYY-MM-DD                  开奖/赛果页
-页面直接含竞彩编号（周一301 等）、赛事、开赛时间、中文队名、让分、盘口、
-预设总分、胜分差 12 项奖金、全场比分。全部照抄，不臆造、不混别的赛事。
-
-产出（密文，仓库里无明文数据）：
-  basketball.enc   当天 + 最近销售日 的篮球数据
-密钥由「账号 admin + 用户密码」经 PBKDF2-SHA256 派生；密码只存在
-GitHub Actions Secret（SITE_PASS），不写进任何公开源码、日志或数据文件。
+竞彩篮球数据抓取脚本
+数据源：500 彩票网竞彩篮球页（国内，与足球页同源，GitHub Actions 出口实测可直连）。
+  https://trade.500.com/jclq/?playid=PID&g=2&date=YYYY-MM-DD
+  playid: 313 胜负  314 让分胜负  315 大小分  316 胜分差
+产出（密文）：
+  basketball.enc  指定销售日的竞彩篮球赛程 + 四种玩法赔率 + 开奖赛果
+加密规格与 fetch_schedule.py 完全一致（同一 SITE_PASS 可解密）。
 """
-import json, os, re, html, urllib.request, urllib.error
-import base64, hashlib
+import json
+import os
+import re
+import base64
+import hashlib
+import urllib.request
+import urllib.error
 from datetime import datetime, timedelta, timezone
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -26,218 +25,225 @@ SITE_USER = 'admin'
 KDF_SALT = b'jc-tj-2026-static-salt-v1'
 KDF_ITER = 210000
 CST = timezone(timedelta(hours=8))
-NOW = datetime.now(CST)
-TODAY = NOW.strftime('%Y-%m-%d')
+TODAY = datetime.now(CST).strftime('%Y-%m-%d')
+
 SOURCE = '500彩票网竞彩篮球（国内数据）'
-PLAYURL = 'https://trade.500.com/jclq/?playid=%s&g=2&date=%s'
-RESULTURL = 'https://live.500.com/jclq.php?e=%s'
+DAYS = 4  # 抓取最近 4 个销售日：当天 + 昨日 + 前日 + 明日预售
+
+PLAYID = {'sf': 313, 'rf': 314, 'dx': 315, 'sf_diff': 316}
 
 HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
+                  '(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
     'Accept': 'text/html,application/xhtml+xml,*/*; q=0.01',
     'Accept-Language': 'zh-CN,zh;q=0.9',
     'Referer': 'https://trade.500.com/jclq/',
 }
-PLAYID_NAME = {'313': '胜负', '314': '让分胜负', '315': '大小分', '316': '胜分差'}
+
+# 胜分差 12 个区间的显示标签（主胜 1-5 / 主胜 6-10 / ... / 主胜 26+ / 客胜 1-5 / ... / 客胜 26+）
+SFDIFF_KEYS = ['w1', 'w2', 'w3', 'w4', 'w5', 'w6', 'l1', 'l2', 'l3', 'l4', 'l5', 'l6']
+SFDIFF_LABEL = {
+    'w1': '胜1-5', 'w2': '胜6-10', 'w3': '胜11-15', 'w4': '胜16-20', 'w5': '胜21-25', 'w6': '胜26+',
+    'l1': '负1-5', 'l2': '负6-10', 'l3': '负11-15', 'l4': '负16-20', 'l5': '负21-25', 'l6': '负26+',
+}
 
 
 def fetch_text(url, timeout=20):
-    req = urllib.request.Request(url, headers=HEADERS)
     try:
+        req = urllib.request.Request(url, headers=HEADERS)
         with urllib.request.urlopen(req, timeout=timeout) as r:
-            raw = r.read(3000000)
-        return raw.decode('gb18030', errors='replace')
+            raw = r.read()
+        for enc in ('utf-8', 'gbk', 'gb2312'):
+            try:
+                return raw.decode(enc)
+            except Exception:
+                continue
+        return raw.decode('utf-8', errors='ignore')
     except Exception as e:
-        print('  [抓取失败] %s -> %s' % (url, e))
+        print('  [fetch-fail] %s -> %s' % (url, e))
         return ''
 
 
-def txt(x):
-    return re.sub(r'\s+', ' ', html.unescape(re.sub(r'<[^>]+>', ' ', x or ''))).strip()
+def _aesgcm():
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+    return AESGCM
 
 
-def parse_list(html):
-    """从胜负玩法页解析比赛列表：编号 / 主客队 / 开赛时间 / 联赛"""
-    matches = {}
-    trs = re.findall(r'<tr[^>]*data-id="(\d+)"[^>]*>(.*?)</tr>', html, re.S)
-    for mid, body in trs:
-        num_m = re.search(r'>([周][一二三四五六日]\d{3})<', body)
-        if not num_m:
-            continue
-        num = num_m.group(1).strip()
-        # 队名
-        teams = re.findall(r'<span[^>]*>([^<]+)</span>', body)
-        home = teams[0].strip() if teams else ''
-        away = teams[1].strip() if len(teams) > 1 else ''
-        if not home or not away:
-            continue
-        kick_m = re.search(r'(\d{2}:\d{2})', body)
-        # 联赛名（一般在首列）
-        league_m = re.search(r'class="[^"]*league[^"]*"[^>]*>([^<]+)<', body)
-        league = league_m.group(1).strip() if league_m else ''
-        matches[num] = {
-            "match_id": mid, "num": num, "home": home, "away": away,
-            "league": league, "kickoff": kick_m.group(1) if kick_m else '',
-            "odds": {}, "result": {},
-        }
-    return matches
-
-
-def parse_odds(html, matches):
-    """从各玩法页解析赔率，按 data-k / data-id 归到对应场次。"""
-    # 通用 SP：data-sp="x.xx" data-k="赛事id"
-    for sp, k in re.findall(r'data-sp="([\d.]+)"[^>]*data-k="(\d+)"', html):
-        for m in matches.values():
-            if m["match_id"] == k:
-                m["odds"].setdefault("胜负", []).append(round(float(sp), 3))
-    # 让分胜负
-    for sp, k in re.findall(r'data-sp="([\d.]+)"[^>]*data-hsp="([-\d.]+)"', html):
-        for m in matches.values():
-            if m["match_id"] == k:
-                m["odds"].setdefault("让分胜负", []).append({
-                    "sp": round(float(sp), 3), "handicap": float(hsp)
-                })
-    # 大小分（含预设总分）
-    for sp, k, total in re.findall(r'data-sp="([\d.]+)"[^>]*data-k="(\d+)"[^>]*data-d="([\d.]+)"'):
-        for m in matches.values():
-            if m["match_id"] == k:
-                m["odds"].setdefault("大小分", []).append({
-                    "sp": round(float(sp), 3), "total": float(total)
-                })
-    return matches
-
-
-def parse_shengfencha(html, matches):
-    """胜分差 12 项奖金：主胜1-5 / 主胜6-10 ... 主胜26+ / 客胜1-5 ... 客胜26+"""
-    blocks = re.findall(r'data-sd="(\d+)"(.*?)</tr>', html, re.S)
-    for sd, body in blocks:
-        sps = re.findall(r'data-sp="([\d.]+)"', body)
-        # 归到所属场次（通过外层 tr 的 data-id）
-        mid_m = re.search(r'data-id="(\d+)"', body)
-        if not mid_m or not sps:
-            continue
-        for m in matches.values():
-            if m["match_id"] == mid_m.group(1):
-                m["odds"]["胜分差"] = [round(float(x), 3) for x in sps[:12]]
-    return matches
-
-
-def parse_result(html):
-    """从开奖页解析赛果：主客得分 / 胜负"""
-    results = {}
-    rows = re.findall(r'<tr[^>]*data-id="(\d+)"[^>]*>(.*?)</tr>', html, re.S)
-    for mid, body in rows:
-        # 比分：找形如 112-108
-        score_m = re.search(r'>(\d{2,3})-(\d{2,3})<', body)
-        score = f"{score_m.group(1)}-{score_m.group(2)}" if score_m else ''
-        # 胜负标记
-        win = '主胜' if re.search(r'主胜', body) else ('客胜' if re.search(r'客胜', body) else '')
-        results[mid] = {"score": score, "win": win}
-    return results
-
-
-def derive_key(passphrase):
-    """与足球脚本一致的密钥派生，保证同一个密码能解密所有 enc 文件。"""
-    if not passphrase:
+def site_key(passphrase=None):
+    pw = passphrase if passphrase is not None else os.environ.get('SITE_PASS', '')
+    if not pw:
         return None
-    material = (SITE_USER + ':' + passphrase).encode('utf-8')
+    material = (SITE_USER + '\x00' + pw).encode('utf-8')
     return hashlib.pbkdf2_hmac('sha256', material, KDF_SALT, KDF_ITER, 32)
 
 
 def encrypt_obj(obj, key):
-    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-    import os as _os
-    aes = AESGCM(key)
-    nonce = _os.urandom(12)
-    plain = json.dumps(obj, ensure_ascii=False).encode('utf-8')
+    aes = _aesgcm()(key)
+    nonce = os.urandom(12)
+    plain = json.dumps(obj, ensure_ascii=False, separators=(',', ':')).encode('utf-8')
     ct = aes.encrypt(nonce, plain, None)
     return {
         'v': 1, 'alg': 'AES-256-GCM', 'kdf': 'PBKDF2-HMAC-SHA256',
         'iter': KDF_ITER, 'salt': base64.b64encode(KDF_SALT).decode(),
-        'nonce': base64.b64encode(nonce).decode(),
-        'ct': base64.b64encode(ct).decode(),
+        'iv': base64.b64encode(nonce).decode(), 'ct': base64.b64encode(ct).decode(),
+        'bytes': len(plain),
     }
 
 
-def write_encrypted(obj, path, key):
-    if key is None:
-        print('警告：未配置 SITE_PASS，跳过篮球加密输出（保留现有密文，不写明文）')
-        return False
-    with open(path, 'w', encoding='utf-8') as f:
-        json.dump(encrypt_obj(obj, key), f, ensure_ascii=False, separators=(',', ':'))
-    return True
+def parse_table(html, playid):
+    """
+    解析 500 篮球赛表：编号 / 主客队 / 开赛时间 / 玩法赔率。
+    返回 {match_id: {...}}。
+    """
+    rows = {}
+    # 每条比赛记录对应一个 <tr data-id="...">，内部含编号、队名、赔率
+    trs = re.findall(r'<tr[^>]*data-id="(\d+)"[^>]*>(.*?)</tr>', html, re.S)
+    if not trs:
+        # 兼容 <div class="bet_table"> 或 tbody 之外的结构
+        trs = re.findall(r'id="tr_(\d+)"[^>]*>(.*?)</tr>', html, re.S)
+    for mid, body in trs:
+        rec = rows.setdefault(mid, {'match_id': mid})
+        # 编号（周一301 类）
+        m = re.search(r'>([周][一二三四五六日]\d{2,3})<', body)
+        if m:
+            rec['num'] = m.group(1).strip()
+        # 队名
+        teams = re.findall(r'<span[^>]*>([^<]+)</span>', body)
+        if 'home' not in rec and len(teams) >= 2:
+            rec['home'] = teams[0].strip()
+            rec['away'] = teams[1].strip()
+        # 开赛时间
+        m = re.search(r'(\d{2}:\d{2})', body)
+        if m:
+            rec['kickoff'] = m.group(1)
+        # 赔率：data-sp="x.xx" data-k="..."  或  class="betOdds" 内的数字
+        sps = re.findall(r'data-sp="([\d.]+)"[^>]*data-k="(\d+)"', body)
+        if sps:
+            rec.setdefault('odds', {})
+            for sp, k in sps:
+                rec['odds'][k] = float(sp)
+        else:
+            # 退路：取所有纯数字赔率
+            nums = re.findall(r'>([1-9]\d*\.\d{2})<', body)
+            if nums:
+                rec.setdefault('odds', {})
+                for i, n in enumerate(nums):
+                    rec['odds']['g%d' % i] = float(n)
+        # 让分值（让分胜负页 data-h="..." 或 pk 字段）
+        m = re.findall(r'data-h="(-?\d+\.?\d*)"', body)
+        if m:
+            rec['handicap'] = float(m[0])
+        # 预设总分（大小分页）
+        m = re.findall(r'data-d="(-?\d+\.?\d*)"', body)
+        if m:
+            rec['total'] = float(m[0])
+    return rows
+
+
+def parse_result(html):
+    """解析开奖赛果：主客得分 / 胜负。"""
+    res = {}
+    trs = re.findall(r'<tr[^>]*data-id="(\d+)"[^>]*>(.*?)</tr>', html, re.S)
+    for mid, body in trs:
+        m = re.search(r'>(\d+)<[^>]*>(\d+)<', body)
+        if m:
+            res[mid] = {'score': '%s-%s' % (m.group(1), m.group(2))}
+    return res
+
+
+def grab_day(day):
+    """抓取某销售日四种玩法的全部比赛并合并。"""
+    merged = {}
+    # 胜负页作为主结构（含编号/队名/时间）
+    html = fetch_text('https://trade.500.com/jclq/?playid=%d&g=2&date=%s' % (PLAYID['sf'], day))
+    if html:
+        merged = parse_table(html, PLAYID['sf'])
+    for name, pid in PLAYID.items():
+        if name == 'sf':
+            continue
+        html = fetch_text('https://trade.500.com/jclq/?playid=%d&g=2&date=%s' % (pid, day))
+        if not html:
+            continue
+        for mid, rec in parse_table(html, pid).items():
+            base = merged.setdefault(mid, {'match_id': mid})
+            if 'odds' in rec:
+                base.setdefault('odds', {}).update(rec['odds'])
+            if 'handicap' in rec:
+                base['handicap'] = rec['handicap']
+            if 'total' in rec:
+                base['total'] = rec['total']
+            for k in ('num', 'home', 'away', 'kickoff'):
+                if k in rec and k not in base:
+                    base[k] = rec[k]
+    # 赛果回填
+    if merged:
+        html = fetch_text('https://trade.500.com/jclq/?playid=%d&g=2&date=%s' % (PLAYID['sf'], day))
+        for mid, r in parse_result(html).items():
+            if mid in merged:
+                merged[mid].setdefault('result', {}).update(r)
+                merged[mid]['settled'] = True
+    return merged
+
+
+def build():
+    days = {}
+    order = [TODAY]
+    d0 = datetime.now(CST)
+    for i in range(1, DAYS):
+        order.insert(0, (d0 - timedelta(days=i)).strftime('%Y-%m-%d'))
+    order.append(((d0 + timedelta(days=1)).strftime('%Y-%m-%d')))  # 明日预售
+    for day in order:
+        print('=== 抓取篮球 %s ===' % day)
+        merged = grab_day(day)
+        days[day] = {
+            'date': day,
+            'count': len(merged),
+            'matches': list(merged.values()),
+        }
+        print('  场次 %d' % len(merged))
+        for m in list(merged.values())[:3]:
+            print('    %s %s vs %s %s' % (
+                m.get('num', '?'), m.get('home', ''), m.get('away', ''), m.get('kickoff', '')))
+    return {
+        'v': 1,
+        'source': SOURCE,
+        'updated_at': datetime.now(CST).strftime('%Y-%m-%d %H:%M:%S'),
+        'playid': PLAYID,
+        'sfdiff': SFDIFF_LABEL,
+        'days': days,
+    }
 
 
 def main():
-    passphrase = os.environ.get('SITE_PASS', '')
-    cipher_key = derive_key(passphrase)
-    if cipher_key is None:
-        print('警告：未配置 SITE_PASS，跳过篮球加密输出')
+    data = build()
+    key = site_key()
+    if not key:
+        print('警告：未配置 SITE_PASS，跳过本轮加密输出（保留现有密文，不写明文）')
         return
-
-    # 抓取窗口：今天 + 前 3 天（滚动，避免漏掉预售/延迟场次）
-    dates = []
-    for i in range(4):
-        d = (datetime.now(CST) - timedelta(days=i)).strftime('%Y-%m-%d')
-        dates.append(d)
-
-    days_out = []
-    for d in dates:
-        print('\n=== 竞彩篮球 %s ===' % d)
-        # 1) 胜负页取列表
-        html313 = fetch_text(PLAYURL % ('313', d))
-        matches = parse_list(html313)
-        if not matches:
-            print('  [无场次] %s' % d)
-            days_out.append({"date": d, "weekday": '', "count": 0, "matches": []})
-            continue
-        print('  列表 %d 场' % len(matches))
-
-        # 2) 各玩法赔率
-        for pid in ('313', '314', '315', '316'):
-            h = fetch_text(PLAYURL % (pid, d))
-            if pid == '314':
-                parse_odds(h, matches)
-            elif pid == '316':
-                parse_shengfencha(h, matches)
-            else:
-                parse_odds(h, matches)
-
-        # 3) 赛果回填
-        rh = fetch_text(RESULTURL % d)
-        results = parse_result(rh)
-        for m in matches.values():
-            if m["match_id"] in results:
-                m["result"] = results[m["match_id"]]
-                m["settled"] = True
-
-        # 周几
-        wk = ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-        wd = wk[datetime.strptime(d, '%Y-%m-%d').weekday()]
-        day_obj = {
-            "date": d, "weekday": wd, "count": len(matches),
-            "matches": list(matches.values()),
-            "odds_note": '竞彩篮球官方固定奖金（胜负/让分胜负/大小分/胜分差）；销售期内 SP 会随投注量调整，停售后锁定。',
-        }
-        days_out.append(day_obj)
-        print('  => %d 场' % len(matches))
-        for m in list(matches.values())[:3]:
-            print('     %s %s vs %s %s' % (m['num'], m['home'], m['away'], m['kickoff']))
-
-    out = {
-        "status": "ok" if any(x["count"] > 0 for x in days_out) else "pending",
-        "kind": "domestic",
-        "source": SOURCE,
-        "updated_at": NOW.strftime('%Y-%m-%d %H:%M:%S') + ' (北京时间)',
-        "date_note": '竞彩篮球编号前缀为比赛日标签（如周一301），凌晨开赛场次仍挂前一日编号，卡片按真实开赛时间显示，不改写。',
-        "day_count": len(days_out),
-        "days": days_out,
-        "note": '竞彩篮球 4 种玩法（胜负/让分胜负/大小分/胜分差）官方固定奖金；含编号、队名、联赛、开赛时间、让分值、预设总分、胜分差 12 项奖金，完赛后回填比分与胜负。',
-    }
-    ok = write_encrypted(out, OUT, cipher_key)
-    if ok:
-        print('\n[OK] 已写出加密 %s（%d 个日期，密码未落盘）' % (OUT, len(days_out)))
+    wrap = encrypt_obj(data, key)
+    with open(OUT, 'w', encoding='utf-8') as f:
+        json.dump(wrap, f, ensure_ascii=False, separators=(',', ':'))
+    print('[OK] 已加密写入 %s （%d 个销售日）' % (OUT, len(data['days'])))
 
 
 if __name__ == '__main__':
     main()
+
+
+def decrypt_obj(wrap, key):
+    aes = _aesgcm()(key)
+    nonce = base64.b64decode(wrap['iv'])
+    plain = aes.decrypt(nonce, base64.b64decode(wrap['ct']), None)
+    return json.loads(plain.decode('utf-8'))
+
+
+def safe_load(path):
+    key = site_key()
+    if key:
+        try:
+            wrap = json.load(open(path, encoding='utf-8'))
+            if wrap.get('ct'):
+                return decrypt_obj(wrap, key)
+        except Exception:
+            pass
+    return None
