@@ -177,6 +177,13 @@ details.oddsnote[open] summary:after{content:' ▴'}
 .onrow b{color:#ffc970;margin-right:6px}
 .mini.spnote{margin-top:4px;color:#8fa6c8;font-size:9px;opacity:.9}
 .spnone{margin-top:7px;padding:7px 8px;border-radius:7px;background:rgba(255,139,149,.08);color:#ff9aa3;font-size:10px;border:1px solid rgba(255,139,149,.25)}
+details.datenote{margin:2px 0 8px;border:1px solid rgba(57,214,168,.32);border-radius:9px;background:rgba(57,214,168,.07);padding:7px 10px}
+details.datenote summary{cursor:pointer;font-size:10px;font-weight:800;color:#6ee7bd;list-style:none;line-height:1.5}
+details.datenote summary::-webkit-details-marker{display:none}
+details.datenote summary:after{content:' ▾'}
+details.datenote[open] summary:after{content:' ▴'}
+.dnbody{margin-top:6px;font-size:10px;color:#bcd6e8;line-height:1.85}
+
 
 .valuebar{margin-top:9px;padding:7px 9px;border-radius:8px;background:rgba(43,125,233,.12);color:#9cc4ff;font-size:10px;font-weight:700;line-height:1.7;border:1px solid rgba(43,125,233,.3)}
 .valuebar.off{background:rgba(255,181,71,.1);color:#ffc970;border-color:rgba(255,181,71,.3)}
@@ -630,7 +637,7 @@ function cardSchedule(d){
   const useHist=state.sport==='football' && days.length>0;
   const live=state.sport==='football' && LIVE && LIVE.status==='ok' && (LIVE.matches||[]).length;
   if(useHist||live){
-    const cur=useHist?(days.find(y=>y.date===state.histDay)||days[0]):null;
+    const cur=useHist?curDay(days):null;
     const rows=useHist?cur.matches:LIVE.matches;
     const isSnap=!!(useHist?false:LIVE.snapshot);
     const isDomestic=useHist||LIVE.kind==='domestic';
@@ -728,16 +735,30 @@ function commonDays(){
 }
 function curDay(days){
   if(!days.length)return null;
-  return days.find(y=>y.date===state.histDay)||days[0];
+  if(state.histDay){const f=days.find(y=>y.date===state.histDay);if(f)return f;}
+  const today=(LOCAL&&LOCAL.date)||'';
+  return days.find(y=>y.date===today)||days.find(y=>(y.label||'').indexOf('今天')>=0)||days[0];
+}
+const DATE_NOTE_DEFAULT='竞彩会提前开售次日场次：一个销售日页面里可能同时挂着「周三00x」和「周四00x」。'+
+  '本站按编号前缀的周几对应到自然日期，保证每格的日期周几与编号周几一致——'+
+  '例如 11-18 是周三，这一格只放周三001~004；周四001~004 归入 11-19 周四格（预售）。'+
+  '编号前缀是竞彩比赛日标签，凌晨开赛的场次仍挂前一日编号：'+
+  '周三场次实际开赛时间是北京时间 11-19 06:30 起，卡片按真实时间显示，不改写。';
+function dateNote(txt){
+  if(!txt)return '';
+  return '<details class="datenote"><summary>📅 日期对应口径：为什么周三格不再出现周四编号</summary>'+
+    '<div class="dnbody">'+txt+'</div></details>';
 }
 function dateBar(days,cur,note){
   if(!days.length||!cur)return '';
-  return '<div class="hint">📅 '+(note||'按日期查看历史')+'（共 '+days.length+' 个销售日）</div>'+
+  return '<div class="hint">📅 '+(note||'按比赛日期对应')+'（共 '+days.length+' 天）</div>'+
+    dateNote((HIST&&HIST.date_note)||DATE_NOTE_DEFAULT)+
     '<div class="datebar">'+days.map(y=>{
-      const numWd=(y.matches[0]&&y.matches[0].num)?y.matches[0].num.slice(0,2):(y.weekday||'');
-      const tag=(y.label||'').indexOf('今天')>=0?'今天':numWd;
+      const wd=y.weekday||((y.matches[0]&&y.matches[0].num)?y.matches[0].num.slice(0,2):'');
+      const lb=y.label||'';
+      const pre=lb.indexOf('预售')>=0?' · 预售':(lb.indexOf('今天')>=0?' · 今天':'');
       return '<button class="datebtn '+(y.date===cur.date?'on':'')+'" data-day="'+y.date+'">'+
-        '<b>'+String(y.date).slice(5)+'</b>'+tag+'<small>'+y.count+' 场</small></button>';
+        '<b>'+String(y.date).slice(5)+'</b>'+wd+'<small>'+y.count+' 场'+pre+'</small></button>';
     }).join('')+'</div>';
 }
 function tabEmpty(title,why){
@@ -762,7 +783,7 @@ function cardOdds(d){
       '<div class="mini" style="width:100%;margin-top:4px">已接的真实盘口在竞彩足球页；点顶部「返回竞彩足球」即可查看</div></div>';
   }
   const days=hkDays();
-  const cur=days.length ? (days.find(y=>y.date===state.histDay)||days[0]) : null;
+  const cur=days.length ? curDay(days) : null;
   if(cur){
     const rows=cur.matches;   // 即使某场无盘口，也要保留它的完赛回填
     if(rows.length){

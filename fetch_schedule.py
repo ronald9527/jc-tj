@@ -33,6 +33,14 @@ YEAR = NOW.year
 DAYS = 10                     # 含今天，往前 9 天（滚动窗口不挤掉展示过的历史）
 SOURCE = '500彩票网竞彩足球（国内数据）'
 
+DATE_NOTE = (
+    '竞彩会提前开售次日场次：一个销售日页面里可能同时挂着「周三00x」和「周四00x」。'
+    '本站按编号前缀的周几对应到自然日期，保证每格的日期周几与编号周几一致——'
+    '例如 11-18 是周三，这一格只放周三001~004；周四001~004 归入 11-19 周四格（明日预售）。'
+    '编号前缀是竞彩比赛日标签，凌晨开赛的场次仍挂前一日编号：'
+    '周三场次的实际开赛时间是北京时间 11-19 06:30 起，卡片上按真实时间显示，不改写。'
+)
+
 SP_NOTE = (
     '本页串关与赛果计算一律使用「竞彩官方固定奖金 SP」（胜/平/负），'
     '它与「澳门/香港/平均欧赔等博彩公司赔率」是两套不同数字，欧赔只用于离散度与盘口分析，'
@@ -1304,6 +1312,119 @@ def write_encrypted(obj, path, key):
             pass
 
 
+WEEK_PREFIX = ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+
+
+def _row_score(r):
+    """同一场可能出现在多个提前开售的销售日页面，挑信息最全的一份。"""
+    s = 0
+    pl = r.get('plays') or {}
+    if pl:
+        s += 10 + sum(len(v) for v in pl.values() if isinstance(v, list))
+    if r.get('hkmo'):
+        s += 8
+    if all((r.get('odds') or {}).get(k) for k in ('h', 'd', 'a')):
+        s += 6
+    if r.get('odds_rq'):
+        s += 2
+    if r.get('result'):
+        s += 4
+    if r.get('intel'):
+        s += 2
+    if r.get('market'):
+        s += 2
+    return s
+
+
+def match_date_of(row, sale_day):
+    """按竞彩编号前缀「周X」把场次归到「日期周几 == 编号周几」的自然日。
+
+    竞彩会提前开售次日场次：?e=2026-11-18（周三）页面里同时挂着
+    「周三001~004」和「周四001~004」。旧逻辑整包塞进 11-18，
+    于是 18 号（周三）格出现周四编号，日期对不上。
+    凌晨开赛的场次编号仍挂前一日（周三场次实际北京时间 11-19 06:30 开赛），
+    这是竞彩惯例，真实开赛时间保留在 row['date'] / row['time'] 不动。
+    """
+    pref = (row.get('num') or '')[:2]
+    if pref not in WEEK_PREFIX:
+        return sale_day
+    try:
+        base = datetime.strptime(sale_day, '%Y-%m-%d').date()
+    except Exception:
+        return sale_day
+    for off in (-1, 0, 1, 2, 3):
+        d = base + timedelta(days=off)
+        if WEEK_PREFIX[d.weekday()] == pref:
+            return d.strftime('%Y-%m-%d')
+    return sale_day
+
+
+def regroup_days(raw_days, today, prev_days=None):
+    """把「销售日维度」抓包结果重组成「比赛日期维度」的日期格。
+
+    保证每格的日期周几与该格场次的编号前缀严格一致，例如
+    11-18 周三格只有周三00x，提前开售的周四00x 归到 11-19 周四格。
+    """
+    buckets = {}
+
+    def put(row, sale_day):
+        md = match_date_of(row, sale_day)
+        row['sale_date'] = sale_day
+        row['match_date'] = md
+        b = buckets.setdefault(md, {'rows': {}, 'sources': set(), 'note': ''})
+        fid = str(row.get('fid') or (md + '|' + (row.get('num') or '')))
+        old = b['rows'].get(fid)
+        if old is None or _row_score(row) > _row_score(old):
+            b['rows'][fid] = row
+        b['sources'].add(sale_day)
+
+    for d in raw_days:
+        for r in d['matches']:
+            put(r, d['date'])
+
+    # 本轮已抓到的 fid 优先；上一轮归档里没抓到的「今天/预售」场次补回来，
+    # 避免 ?e= 偶发失败时次日预售场次整格消失。
+    fresh = {str(r.get('fid')) for d in raw_days for r in d['matches'] if r.get('fid')}
+    for pd, pday in (prev_days or {}).items():
+        if pd < today:
+            continue
+        for r in (pday.get('matches') or []):
+            if str(r.get('fid')) in fresh:
+                continue
+            put(r, pd)
+
+    out = []
+    for md in sorted(buckets.keys(), reverse=True):
+        b = buckets[md]
+        rows = sorted(b['rows'].values(), key=lambda x: (x.get('num') or ''))
+        if not rows:
+            continue
+        try:
+            cur = datetime.strptime(md, '%Y-%m-%d').date()
+            td = datetime.strptime(today, '%Y-%m-%d').date()
+            wd = WEEK_PREFIX[cur.weekday()]
+            off = (cur - td).days
+        except Exception:
+            wd, off = '', 0
+        label = ('今天' if off == 0 else
+                 '明日预售' if off == 1 else
+                 '后天预售' if off == 2 else
+                 ('昨天' if off == -1 else ''))
+        pref_seen = sorted(set((r.get('num') or '')[:2] for r in rows if r.get('num')))
+        nums = [r['num'] for r in rows if r.get('num')]
+        out.append({
+            'date': md, 'weekday': wd, 'label': label,
+            'count': len(rows), 'num_span': (nums[0] + '–' + nums[-1]) if nums else '',
+            'num_prefix': pref_seen,
+            'date_matched': (len(pref_seen) == 1 and pref_seen[0] == wd),
+            'matches': rows,
+            'probe': [{'regroup': '按编号前缀周几归到对应日期',
+                       'from_sale_days': sorted(b['sources']),
+                       'prefix_ok': len(pref_seen) == 1 and pref_seen[0] == wd}],
+        })
+    return out
+
+
 def main():
     cipher_key = site_key()   # 注意：下面循环里的 key 是「销售日键」，不要复用此名
     if cipher_key is None:
@@ -1403,6 +1524,14 @@ def main():
               (day, key, days[-1]['weekday'] if days else '', len(rows),
                tried[0].get('rows', tried[0].get('http', ''))))
 
+    # 按竞彩编号前缀「周X」重组：18 号（周三）格只放周三00x，
+    # 提前开售的周四00x 归到 19 号（周四），日期与星期严格对应。
+    days = regroup_days(days, TODAY, prev_days)
+    print('按编号前缀重组为 %d 个比赛日：%s' % (
+        len(days), '、'.join('%s(%s %d场%s)' % (
+            x['date'], x['weekday'], x['count'], '' if x.get('date_matched') else ' ⚠前缀混杂')
+            for x in days)))
+
     # 完赛后自动回填赛果：比分 / 胜平负 / 让球胜平负 / 半全场 / 总进球 / 比分玩法
     all_rows = [m for d in days for m in d['matches']]
     prev_settled = {}
@@ -1462,21 +1591,22 @@ def main():
             if (m['market'].get('dispersion') or {}).get('n', 0) >= 3:
                 market_hit += 1
         d['parlay_recs'] = build_parlay_recs(d['matches'], all_rows)
-    recs = days[0].get('parlay_recs', {}) if days else {}
+    today_day = next((x for x in days if x['date'] == TODAY), None)
+    recs = (today_day or (days[0] if days else {})).get('parlay_recs', {})
     print('市场模型：%d/%d 场含 ≥3 家公司赔率 · 精选 %s'
           % (market_hit, len(all_rows),
              '、'.join('%s:%s' % (k, '有' if v.get('ok') else '缺')
                        for k, v in recs.items() if not k.startswith('_'))))
 
-    # data.json：今天（兼容旧逻辑）
-    today_rows = days[0]['matches'] if days else []
+    # data.enc：今天这一格（按编号前缀对应后的自然日，不含次日预售场次）
+    today_rows = (today_day or (days[0] if days else {})).get('matches', [])
     if today_rows:
         data = {
             'status': 'ok', 'kind': 'domestic', 'source': SOURCE,
             'updated_at': now + ' (北京时间)', 'upstream_time': '',
             'date': TODAY, 'count': len(today_rows), 'matches': today_rows,
             'parlay_recs': recs, 'probe': probe, 'odds_note': SP_NOTE,
-            'note': '国内 500 彩票网；完赛后自动回填全场比分/胜平负/让球胜平负/半全场/总进球/比分赛果及对应官方奖金；全部玩法固定奖金 + 港澳盘口 + 情报强弱模型 + 庄家视角指标 + 2串1~4串1 精选，按销售日归档供 6 个 Tab 共享历史。',
+            'note': '国内 500 彩票网；按竞彩编号前缀周几对应到自然日期（周三格只放周三00x，提前开售的周四00x 归 11-19 周四格）；完赛后自动回填全场比分/胜平负/让球胜平负/半全场/总进球/比分赛果及对应官方奖金；含全部玩法固定奖金、港澳盘口、情报强弱模型、庄家视角指标与 2串1~4串1 精选，供 6 个 Tab 按日期切换。',
         }
     elif prev.get('matches'):
         data = dict(prev)
@@ -1488,14 +1618,15 @@ def main():
                 'upstream_time': '', 'date': '', 'count': 0, 'matches': [], 'probe': probe}
     write_encrypted(data, OUT, cipher_key)
 
-    # history.enc：最近 DAYS 个销售日，供页面按日期切换
+    # history.enc：按比赛日期归档，供页面按日期切换
     hist = {
         'status': 'ok' if days else 'pending',
         'kind': 'domestic', 'source': SOURCE,
         'updated_at': now + ' (北京时间)',
         'odds_note': SP_NOTE,
+        'date_note': DATE_NOTE,
         'day_count': len(days), 'days': days,
-        'note': '按竞彩销售日归档；完赛自动回填 results（比分/胜平负/让球胜平负/半全场/总进球/比分玩法 + 中奖奖金）与 settled_at；另含全部玩法奖金、港澳盘口、情报强弱模型（intel）、市场模型（market）与串关精选（parlay_recs），供 6 个 Tab 按日期切换查看历史。',
+        'note': '按竞彩编号前缀周几对应到自然日期归档（周三格只放周三00x）；完赛自动回填 results（比分/胜平负/让球胜平负/半全场/总进球/比分玩法 + 中奖奖金）与 settled_at；另含全部玩法奖金、港澳盘口、情报强弱模型（intel）、市场模型（market）与串关精选（parlay_recs），供 6 个 Tab 按日期切换查看历史。',
     }
     write_encrypted(hist, HIST, cipher_key)
     print('已写出加密 data.enc 与 history.enc（%d 个日期，密码未落盘）' % len(days))
