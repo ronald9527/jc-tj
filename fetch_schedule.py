@@ -30,7 +30,7 @@ CST = timezone(timedelta(hours=8))
 NOW = datetime.now(CST)
 TODAY = NOW.strftime('%Y-%m-%d')
 YEAR = NOW.year
-DAYS = 8                      # 含今天，往前 7 天
+DAYS = 10                     # 含今天，往前 9 天（滚动窗口不挤掉展示过的历史）
 SOURCE = '500彩票网竞彩足球（国内数据）'
 
 HEADERS = {
@@ -1188,21 +1188,40 @@ def build_parlay_recs(day_matches, all_rows):
     }
     return recs
 
-def grab_day(day):
-    """抓一个销售日。返回 (rows, tried, 页面真实销售日)。"""
+def grab_day(day, allow_default=True):
+    """抓一个销售日。返回 (rows, tried, 页面真实销售日)。
+
+    ?e= 偶发读超时，重试 3 次；历史日**禁止**回落默认页——默认页是「当前期」，
+    回落后页面自报的销售日会变成今天，导致该历史日被当成重复期跳过（11-17 曾因此丢失）。
+    """
     tried = []
-    for label, url in (('e', BASE + '?e=' + day), ('default', BASE)):
+    e_url = BASE + '?e=' + day
+    for attempt in range(3):
         try:
-            text = fetch_text(url)
+            text = fetch_text(e_url, timeout=18 + attempt * 6)
             real = page_sale_date(text)
             rows = parse_500(text, real or day)
-            tried.append({'url': label, 'http': 200, 'rows': len(rows), 'page_date': real})
+            tried.append({'url': 'e', 'http': 200, 'rows': len(rows),
+                          'page_date': real, 'attempt': attempt + 1})
             if rows:
                 return rows, tried, real
         except urllib.error.HTTPError as e:
-            tried.append({'url': label, 'http': e.code})
+            tried.append({'url': 'e', 'http': e.code, 'attempt': attempt + 1})
         except Exception as e:
-            tried.append({'url': label, 'err': '%s: %s' % (type(e).__name__, str(e)[:80])})
+            tried.append({'url': 'e', 'err': '%s: %s' % (type(e).__name__, str(e)[:80]),
+                          'attempt': attempt + 1})
+    if allow_default:
+        try:
+            text = fetch_text(BASE)
+            real = page_sale_date(text)
+            rows = parse_500(text, real or day)
+            tried.append({'url': 'default', 'http': 200, 'rows': len(rows), 'page_date': real})
+            if rows:
+                return rows, tried, real
+        except urllib.error.HTTPError as e:
+            tried.append({'url': 'default', 'http': e.code})
+        except Exception as e:
+            tried.append({'url': 'default', 'err': '%s: %s' % (type(e).__name__, str(e)[:80])})
     return [], tried, ''
 
 
@@ -1286,12 +1305,21 @@ def main():
 
     days, probe, seen = [], [], set()
     for day in dates:
-        rows, tried, real = grab_day(day)
-        # ?e= 未生效时会返回当前默认页；以页面自报的销售日为准，避免同一期重复归档
-        key = real or day
+        rows, tried, real = grab_day(day, allow_default=(day == TODAY))
+        # 页面回落（或 ?e= 未生效）时自报的是「当前期」，绝不能冒充历史销售日
         req_mismatch = bool(real and real != day)
-        if not rows and key in prev_days:
-            rows = prev_days[key]['matches']
+        if req_mismatch and rows:
+            if day in prev_days:
+                rows = prev_days[day]['matches']
+                tried.append({'fallback': '页面回落到 %s，沿用本日上次成功归档' % real})
+            else:
+                tried.append({'drop': '页面回落到 %s 且本日无历史归档，本轮不写入（不冒充）' % real})
+                rows = []
+            real = day
+            req_mismatch = False
+        key = real or day
+        if not rows and day in prev_days:
+            rows = prev_days[day]['matches']
             tried.append({'fallback': '沿用上次成功抓取'})
         # 四个玩法页（胜平负/让球、总进球、比分、半全场），按 fid 合并
         play_stats = []
