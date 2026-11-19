@@ -1,0 +1,46 @@
+name: 篮球抓取出口测试2
+on:
+  workflow_dispatch:
+  push:
+    paths: ['.github/workflows/basketball_probe2.yml']
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: 抓取测试并写入结果
+        run: |
+          python3 - << 'PY'
+          import urllib.request, re, json
+          HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0 Safari/537.36', 'Referer': 'https://www.500.com/'}
+          def fetch(u):
+              req = urllib.request.Request(u, headers=HEADERS)
+              with urllib.request.urlopen(req, timeout=25) as r:
+                  raw = r.read()
+              try: return raw.decode('gb18030', errors='replace')
+              except: return raw.decode('utf-8', errors='replace')
+          results = {}
+          for u in [
+              'https://trade.500.com/jclq/?date=2026-11-18&g=2&playid=275',
+              'https://trade.500.com/jclq/?date=2026-11-18&g=1&playid=313',
+              'https://www.sporttery.cn/jc/lqsgkj/?end_date=2026-11-18&start_date=2026-11-18',
+              'https://live.500.com/jczq.php?e=2026-11-18',
+          ]:
+              try:
+                  t = fetch(u)
+                  results[u] = {'ok': True, 'bytes': len(t), 'betC': t.count('betC'), 'week': t.count('周'), 'num301': t.count('301'), 'tr': t.count('<tr'), 'jclq': t.count('jclq')}
+              except Exception as e:
+                  results[u] = {'ok': False, 'error': str(e)[:200]}
+          with open('probe_result.json','w') as f:
+              json.dump(results, f, ensure_ascii=False, indent=2)
+          print(json.dumps(results, ensure_ascii=False, indent=2))
+          PY
+      - name: 提交结果
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add probe_result.json
+          git commit -m "篮球抓取出口测试结果 $(date -u +%H:%M:%SZ)" || echo "no changes"
+          git push
