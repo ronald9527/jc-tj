@@ -1,0 +1,43 @@
+
+name: 篮球胜分差展开抓取
+on:
+  workflow_dispatch:
+  push:
+    paths: ['.github/workflows/basketball_sfc.yml']
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: 抓取胜分差展开
+        run: |
+          python3 - << 'PY'
+          import urllib.request, os, json, re
+          HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0 Safari/537.36', 'Referer': 'https://trade.500.com/jclq/'}
+          # 500 篮球胜分差展开接口（常见为 ajax）
+          for u in [
+            'https://trade.500.com/jclq/?date=2026-11-18&g=2&playid=291&ex=1',
+            'https://trade.500.com/jclq/?date=2026-11-18&g=3&playid=291',
+            'https://trade.500.com/jclq/?date=2026-11-18&g=2&playid=291&expand=1',
+          ]:
+              try:
+                  req = urllib.request.Request(u, headers=HEADERS)
+                  with urllib.request.urlopen(req, timeout=25) as r:
+                      raw = r.read()
+                  try: t = raw.decode('gb18030', errors='replace')
+                  except: t = raw.decode('utf-8', errors='replace')
+                  with open(f'basketball_pages2/sfc_probe_{u.split("playid=")[1][:6]}.html','w',encoding='utf-8') as f:
+                      f.write(t)
+                  print(f'{u}: {len(t)} bytes, sfc={t.count("sfc")}, data-sp={len(re.findall("data-sp", t))}')
+              except Exception as e:
+                  print(f'{u}: ERROR {e}')
+          PY
+      - name: 提交
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.com"
+          git add basketball_pages2/
+          git commit -m "篮球胜分差展开探测 $(date -u +%H:%M:%SZ)" || echo "no changes"
+          git push
