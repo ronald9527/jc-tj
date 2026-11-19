@@ -2,10 +2,19 @@ name: 每日竞彩篮球数据抓取
 
 on:
   schedule:
+    # 北京时间: 02:00 06:00 08:00 10:00 12:00 14:00 16:00 18:00 20:00 22:00 00:00
+    # 覆盖全天，确保赛果能及时回填
+    - cron: '0 18 * * *'
     - cron: '0 22 * * *'
+    - cron: '0 2 * * *'
     - cron: '0 4 * * *'
+    - cron: '0 6 * * *'
+    - cron: '0 8 * * *'
     - cron: '0 10 * * *'
+    - cron: '0 12 * * *'
+    - cron: '0 14 * * *'
     - cron: '0 16 * * *'
+    - cron: '0 20 * * *'
   workflow_dispatch:
 
 permissions:
@@ -32,11 +41,11 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.com"
-          if git diff --quiet -- basketball.enc; then
-            echo "篮球加密数据无变化，跳过提交"
+          if git diff --quiet -- basketball.enc basketball.json; then
+            echo "篮球数据无变化，跳过提交"
           else
             git add basketball.enc basketball.json
-            git commit -m "自动更新竞彩篮球数据 $(date -u +%Y-%m-%dT%H:%MZ)"
+            git commit -m "自动更新竞彩篮球数据(含赛果回填) $(date -u +%Y-%m-%dT%H:%MZ)"
             git pull --rebase origin main
             git push
           fi
