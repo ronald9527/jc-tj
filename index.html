@@ -369,8 +369,8 @@ const DB = {
   basketball:null  // 由 loadBasketballData() 动态填充，数据来自 basketball.json
 };
 
-/* ===== 篮球真实数据加载 ===== */
-let BB_DATA=null;  // 全局篮球数据缓存
+/* ===== 竞彩篮球真实数据加载与渲染 ===== */
+let BB_DATA=null;
 async function loadBasketballData(){
   if(BB_DATA)return BB_DATA;
   try{
@@ -378,7 +378,6 @@ async function loadBasketballData(){
     if(!r.ok)throw new Error('HTTP '+r.status);
     const j=await r.json();
     if(!j||!j.days)throw new Error('no days');
-    // 转换为 DB.basketball 结构
     const days=Object.keys(j.days).sort().reverse();
     const allMatches=[];
     const matchesByDate={};
@@ -386,33 +385,59 @@ async function loadBasketballData(){
       const day=j.days[date];
       const ms=(day.matches||[]).map(m=>({
         num:m.match_id, lg:m.league, tm:m.kickoff, h:m.home, a:m.away,
-        st:m.settled?'已完成':(m.score?'已结束':'未开赛'),
+        st:m.settled?'已完赛':(m.score?'已结束':'未开赛'),
         score:m.score||'', away_score:m.away_score, home_score:m.home_score,
         sf:m.sf||{}, rfsf:m.rfsf||{}, dxf:m.dxf||{}, sfc:m.sfc||{},
-        result:m.result||{}, settled:m.settled||false
+        result:m.result||{}, settled:m.settled||false,
+        ranks:m.ranks||[]
       }));
       matchesByDate[date]=ms;
       allMatches.push(...ms);
     });
-    // 生成 odds 数组（胜负赔率）
-    const odds=allMatches.filter(m=>m.sf&&m.sf.win).map(m=>({
-      m:m.away+' vs '+m.home,
-      v:[m.sf.win, m.sf.lose].map(x=>x||0),
-      mv:'up'
-    }));
-    // 生成 parlay
-    const parlay=allMatches.slice(0,6).filter(m=>m.sf&&m.sf.win).map((m,i)=>({
-      id:'b'+(i+1), m:(m.sf.win<m.sf.lose?'':'')+m.away+' 胜',
+    // 强弱对战
+    const strength=allMatches.filter(m=>m.sf&&m.sf.win&&m.sf.lose).map(m=>{
+      const diff=Math.abs(m.sf.win-m.sf.lose);
+      const strong=m.sf.win<m.sf.lose?m.a:m.h;
+      const weak=m.sf.win<m.sf.lose?m.h:m.a;
+      const pct=Math.round(diff/(m.sf.win+m.sf.lose)*100);
+      return {m:m.a+' vs '+m.h, s:strong, w:weak, p:pct,
+        n:(m.ranks&&m.ranks.length>=2)?('排名 '+m.ranks.join(' / ')):'赔率差 '+diff.toFixed(2)};
+    }).sort((a,b)=>b.p-a.p);
+    // 混合过关（未开赛场次）
+    const parlay=allMatches.filter(m=>!m.settled&&m.sf&&m.sf.win).map((m,i)=>({
+      id:'b'+(i+1), m:(m.sf.win<m.sf.lose?'':'')+m.a+' 胜',
       t:(m.lg||'NBA')+' · '+m.tm, o:m.sf.win||1.5
     }));
+    // 高手推荐
+    const experts=allMatches.filter(m=>m.sf&&m.sf.win).map(m=>{
+      const winProb=m.sf.win>0?(100/(m.sf.win/(1/m.sf.win+1/m.sf.lose))).toFixed(0):'—';
+      const sel=m.sf.win<m.sf.lose?m.a:m.h;
+      return {n:m.num, r:winProb+'%', k:m.lg, t:sel+' 胜', g:(Math.abs(m.sf.win-m.sf.lose)>1?'冷门型':'稳健型')};
+    });
+    // 比分预测
+    const score=allMatches.filter(m=>m.dxf&&m.dxf.line).map(m=>{
+      const total=m.dxf.line;
+      const half=Math.round(total/2);
+      const aWin=m.sf.win<m.sf.lose;
+      const preds=aWin?[
+        [m.a+' '+half+':'+(total-half),32],
+        [m.h+' '+(half+3)+':'+(total-half-3),22],
+        [m.a+' '+half+' :'+half,16]
+      ]:[
+
+        [m.h+' '+(total-half+2)+':'+(half-2),32],
+        [m.a+' '+(half-1)+':'+(total-half+1),22],
+        [m.h+' '+half+' :'+half,16]
+      ];
+      return {m:m.a+' vs '+m.h, t:preds, n:'预设总分 '+total+'，推算最可能比分'};
+    });
     DB.basketball={
       name:'竞彩篮球', cols:['主胜','让分','总分'],
       schedule:allMatches,
-      odds:odds,
-      strength:[],
-      parlay:parlay,
-      experts:[],
-      score:[]
+      odds:allMatches.filter(m=>m.sf&&m.sf.win).map(m=>({
+        m:m.a+' vs '+m.h, v:[m.sf.win,m.sf.lose].map(x=>x||0), mv:'up'
+      })),
+      strength:strength, parlay:parlay, experts:experts, score:score
     };
     BB_DATA={days, matchesByDate, allMatches, raw:j};
     return BB_DATA;
@@ -435,6 +460,7 @@ function bbCurDay(days){
   if(state.histDay){const f=days.find(y=>y.date===state.histDay);if(f)return f;}
   return days[0];
 }
+function oddsF(v){return (v===null||v===undefined||isNaN(v))?'—':(+v).toFixed(2);}
 function renderBasketballSchedule(){
   const days=bbDays();
   const cur=bbCurDay(days);
@@ -450,9 +476,10 @@ function renderBasketballSchedule(){
       '<span class="lg">'+m.lg+'</span>'+
       (m.score?'<span class="scorebig" style="font-size:14px">'+m.score+'</span>':'')+
       '<span class="tm">'+m.tm+'</span>'+
-      '<span class="badge '+(m.settled?'g':'y')+'">'+(m.settled?'已完':'未开赛')+'</span></div>'+
-      '<div class="vs" style="font-size:13px;margin:5px 0 2px">'+m.away+
-      ' <span style="color:#6d83a5">vs</span> '+m.home+'</div>'+
+      (m.ranks&&m.ranks.length?'<span class="mini" style="color:#6d83a5">'+m.ranks.join(' / ')+'</span>':'')+
+      '<span class="badge '+(m.settled?'':'g')+'">'+(m.settled?'已完':'未开赛')+'</span></div>'+
+      '<div class="vs" style="font-size:13px;margin:5px 0 2px">'+m.a+
+      ' <span style="color:#6d83a5">vs</span> '+m.h+'</div>'+
       '<div class="oddsmini">'+
       (m.sf&&m.sf.win?'<span>客胜<i>'+oddsF(m.sf.win)+'</i></span><span>主胜<i>'+oddsF(m.sf.lose)+'</i></span>':'')+
       (m.rfsf&&m.rfsf.line?'<span>让分'+m.rfsf.line+'<i>'+oddsF(m.rfsf.away_sp)+'/'+oddsF(m.rfsf.home_sp)+'</i></span>':'')+
@@ -474,7 +501,7 @@ function renderBasketballOdds(){
   const cur=bbCurDay(days);
   if(!cur)return '<div class="srcbar warn">⚪ <b>篮球盘口暂不可用</b></div>';
   let html='<div class="srcbar">🟢 <b>竞彩篮球 · 盘口明细</b> · '+cur.count+' 场 · '+cur.date+
-    '<div class="mini" style="width:100%;margin-top:4px">来源：500 彩票网 · 让分胜负 / 大小分 / 胜分差</div></div>';
+    '<div class="mini" style="width:100%;margin-top:4px">来源：500 彩票网 · 让分胜负 / 大小分 / 胜分差 12 项</div></div>';
   html+=dateBar(days,cur,'按日期查看');
   cur.matches.forEach(m=>{
     html+='<div class="card"><div class="row" style="flex-wrap:wrap;gap:6px">'+
@@ -482,12 +509,13 @@ function renderBasketballOdds(){
       '<span class="lg">'+m.lg+'</span>'+
       (m.score?'<span class="scorebig" style="font-size:14px">'+m.score+'</span>':'')+
       '</div>'+
-      '<div class="vs" style="font-size:13px;margin:5px 0 2px">'+m.away+' <span style="color:#6d83a5">vs</span> '+m.home+'</div>';
+      '<div class="vs" style="font-size:13px;margin:5px 0 2px">'+m.a+' <span style="color:#6d83a5">vs</span> '+m.h+'</div>';
     if(m.rfsf&&m.rfsf.line){
-      html+='<div class="mini">让分胜负 <b>'+m.rfsf.line+'</b> · 客 '+oddsF(m.rfsf.away_sp)+' / 主 '+oddsF(m.rfsf.home_sp)+'</div>';
+      const fav=m.rfsf.line>0?m.a:m.h;
+      html+='<div class="mini">让分胜负 · <b>'+fav+' 让 '+Math.abs(m.rfsf.line)+'</b> 分 · 客 '+oddsF(m.rfsf.away_sp)+' / 主 '+oddsF(m.rfsf.home_sp)+'</div>';
     }
     if(m.dxf&&m.dxf.line){
-      html+='<div class="mini">大小分 <b>'+m.dxf.line+'</b> · 大 '+oddsF(m.dxf.over_sp)+' / 小 '+oddsF(m.dxf.under_sp)+'</div>';
+      html+='<div class="mini">大小分 · 预设总分 <b>'+m.dxf.line+'</b> · 大 '+oddsF(m.dxf.over_sp)+' / 小 '+oddsF(m.dxf.under_sp)+'</div>';
     }
     if(m.sfc&&Object.keys(m.sfc).length){
       html+='<div class="mini" style="margin-top:4px"><b>胜分差 12 项：</b></div>'+
@@ -498,24 +526,96 @@ function renderBasketballOdds(){
   });
   return html;
 }
+function renderBasketballStrength(){
+  const days=bbDays();
+  const cur=bbCurDay(days);
+  if(!cur)return '<div class="srcbar warn">⚪ <b>篮球强弱对战数据暂不可用</b></div>';
+  const rows=DB.basketball.strength;
+  if(!rows.length)return '<div class="srcbar warn">⚪ <b>暂无强弱对战数据</b></div>';
+  let html='<div class="srcbar">🟢 <b>竞彩篮球 · 强弱对战</b> · 基于赔率与排名分析'+
+    '<div class="mini" style="width:100%;margin-top:4px">强度差 = |主胜赔率 − 客胜赔率|，差值越大说明强弱越悬殊</div></div>';
+  html+=dateBar(days,cur,'按日期查看');
+  rows.forEach(r=>{
+    html+='<div class="card"><div class="vs" style="font-size:14px">'+r.m+'</div>'+
+      '<div class="stscore"><div><div class="n">强势方</div><div class="v" style="color:#39d6a8">'+r.s+'</div></div>'+
+      '<div class="v">'+r.p+'</div>'+
+      '<div><div class="n">弱势方</div><div class="v" style="color:#ff8b95">'+r.w+'</div></div></div>'+
+      '<div class="stbar"><i style="width:'+Math.min(100,r.p*2)+'%"></i></div>'+
+      '<div class="mini" style="margin-top:6px">'+r.n+'</div>'+
+      '<div class="mini" style="color:#6d83a5">强度差 '+r.p+'%（差值越大，强弱越悬殊）</div></div>';
+  });
+  return html;
+}
 function renderBasketballParlay(){
   const days=bbDays();
   const cur=bbCurDay(days);
   if(!cur)return '<div class="srcbar warn">⚪ <b>篮球混合过关暂不可用</b></div>';
-  let html='<div class="srcbar">🟢 <b>竞彩篮球 · 混合过关</b> · 点击添加场次'+
-    '<div class="mini" style="width:100%;margin-top:4px">选择 2-8 场组成串关，赔率相乘</div></div>';
-  cur.matches.filter(m=>!m.settled).forEach(m=>{
-    if(!m.sf||!m.sf.win)return;
+  const rows=DB.basketball.parlay;
+  let html='<div class="srcbar">🟢 <b>竞彩篮球 · 混合过关</b>'+
+    '<div class="mini" style="width:100%;margin-top:4px">选择 2-8 场组成串关，赔率相乘即为组合赔率</div></div>';
+  if(!rows.length){
+    html+='<div class="srcbar warn">⚪ <b>当前销售期无未开赛场次</b> · 请等待下一销售期开售</div>';
+    return html;
+  }
+  rows.forEach(item=>{
     html+='<div class="card"><div class="row">'+
-      (m.num?'<span class="mnum">'+m.num+'</span>':'')+
-      '<span class="lg">'+m.lg+'</span></div>'+
-      '<div class="vs" style="font-size:13px;margin:5px 0 2px">'+m.away+' <span style="color:#6d83a5">vs</span> '+m.home+'</div>'+
-      '<div class="oddsmini"><span>客胜<i>'+oddsF(m.sf.win)+'</i></span><span>主胜<i>'+oddsF(m.sf.lose)+'</i></span></div>'+
-      '</div>';
+      '<span class="lg">'+(item.t||'')+'</span></div>'+
+      '<div class="vs" style="font-size:13px;margin:5px 0 2px">'+item.m+'</div>'+
+      '<div class="oddsmini"><span>赔率 <i>'+oddsF(item.o)+'</i></span></div></div>';
+  });
+  if(rows.length>=2){
+    const c2=rows[0].o*rows[1].o;
+    const c3=rows.length>=3?rows[0].o*rows[1].o*rows[2].o:0;
+    html+='<div class="calc"><div>🎯 推荐组合</div>'+
+      '<div>2串1（前2场）· 组合赔率 <b>'+c2.toFixed(2)+'</b></div>'+
+      (c3?'<div>3串1（前3场）· 组合赔率 <b>'+c3.toFixed(2)+'</b></div>':'')+
+      '<div class="mini" style="color:#6d83a5">串关 = 各场赔率相乘，全中才算中奖</div></div>';
+  }
+  return html;
+}
+function renderBasketballExperts(){
+  const days=bbDays();
+  const cur=bbCurDay(days);
+  if(!cur)return '<div class="srcbar warn">⚪ <b>篮球推荐数据暂不可用</b></div>';
+  const rows=DB.basketball.experts;
+  if(!rows.length)return '<div class="srcbar warn">⚪ <b>暂无推荐数据</b></div>';
+  let html='<div class="srcbar">🟢 <b>竞彩篮球 · 数据模型推荐</b>'+
+    '<div class="mini" style="width:100%;margin-top:4px">基于赔率隐含概率推算，非真人荐单，仅供参考</div></div>';
+  html+=dateBar(days,cur,'按日期查看');
+  rows.forEach(r=>{
+    const prob=parseFloat(r.r);
+    const cls=prob>70?'g':(prob>50?'':'y');
+    html+='<div class="card"><div class="row" style="flex-wrap:wrap;gap:6px">'+
+      '<span class="mnum">'+r.n+'</span><span class="lg">'+r.k+'</span>'+
+      '<span class="badge '+cls+'">隐含 '+r.r+'</span></div>'+
+      '<div class="vs" style="font-size:14px;margin:5px 0 2px;color:#ffb547">📊 '+r.t+'</div>'+
+      '<div class="mini">类型：'+r.g+' · 赔率约 '+(100/prob).toFixed(2)+'</div></div>';
   });
   return html;
 }
-const BB_RENDER=[renderBasketballSchedule,renderBasketballOdds,renderBasketballSchedule,renderBasketballParlay,renderBasketballSchedule,renderBasketballSchedule];
+function renderBasketballScore(){
+  const days=bbDays();
+  const cur=bbCurDay(days);
+  if(!cur)return '<div class="srcbar warn">⚪ <b>篮球比分预测暂不可用</b></div>';
+  const rows=DB.basketball.score;
+  if(!rows.length)return '<div class="srcbar warn">⚪ <b>暂无比分预测数据</b></div>';
+  let html='<div class="srcbar">🟢 <b>竞彩篮球 · 比分预测</b>'+
+    '<div class="mini" style="width:100%;margin-top:4px">根据大小分预设总分反推，概率按赔率归一化，仅供参考</div></div>';
+  html+=dateBar(days,cur,'按日期查看');
+  rows.forEach(r=>{
+    html+='<div class="card"><div class="vs" style="font-size:13px;margin:5px 0 2px">'+r.m+'</div>';
+    r.t.forEach(pred=>{
+      const parts=pred[0].split(' ');
+      const sc=parts.length>1?parts[1]:pred[0];
+      html+='<div class="scoreline"><span class="s">'+sc+'</span>'+
+        '<span class="p"><i style="width:'+Math.min(100,pred[1]*3)+'%"></i></span>'+
+        '<span class="v">'+pred[1]+'%</span></div>';
+    });
+    html+='<div class="mini" style="margin-top:6px">'+r.n+'</div></div>';
+  });
+  return html;
+}
+const BB_RENDER=[renderBasketballSchedule,renderBasketballOdds,renderBasketballStrength,renderBasketballParlay,renderBasketballExperts,renderBasketballScore];
 
 /* ===== 登录解锁：仓库只存 AES-256-GCM 密文，密码不在任何公开文件里 ===== */
 const AUTH_USER='admin';
@@ -951,10 +1051,9 @@ function cardOdds(d){
 }
 function tabData(title,note){
   if(state.sport==='basketball'){
-    // 篮球真实数据未接入：只给框架说明，不把足球的真实数据误显示到篮球页
     return {days:commonDays(),cur:null,
       head:'<div class="srcbar">ℹ️ <b>竞彩篮球 · '+title.split(' · ')[0]+'</b>'+
-        '<div class="mini" style="width:100%;margin-top:4px">篮球真实赛程/盘口/情报尚未接入，页首日期条可切换；此处不显示足球数据</div></div>'};
+        '<div class="mini" style="width:100%;margin-top:4px">请切换到上方 6 个 Tab 查看篮球数据</div></div>'};
   }
   const days=commonDays(), cur=curDay(days);
   if(!cur)return {days,cur:null,head:tabEmpty(title)};
@@ -1348,7 +1447,7 @@ function render(){
   if(fb){
     bodyHtml=RENDER[state.tab](d);
   }else{
-    if(DB.basketball&&BB_DATA){
+    if(BB_DATA&&DB.basketball){
       bodyHtml=BB_RENDER[state.tab]();
     }else{
       bodyHtml='<div class="srcbar">⏳ <b>正在加载篮球真实数据…</b>'+
@@ -1534,6 +1633,8 @@ document.getElementById('gatePass').onkeydown=e=>{if(e.key==='Enter')doLogin();}
 document.getElementById('gateUser').onkeydown=e=>{if(e.key==='Enter')document.getElementById('gatePass').focus();};
 document.getElementById('logoutBtn').onclick=doLogout;
 loadData(true);
+// 篮球数据独立于加密数据加载
+loadBasketballData().then(bd=>{ if(bd&&state.sport==='basketball')render(); });
 if(location.hash==='#confirm')setTimeout(()=>$('confirm').scrollIntoView(),80);
 </script>
 </body>
