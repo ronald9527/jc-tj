@@ -394,42 +394,65 @@ async function loadBasketballData(){
       matchesByDate[date]=ms;
       allMatches.push(...ms);
     });
-    // 强弱对战
-    const strength=allMatches.filter(m=>m.sf&&m.sf.win&&m.sf.lose).map(m=>{
+    // 强弱对战：按胜负赔率差排序
+    const strength=allMatches.filter(m=>m.sf&&m.sf.win&&m.sf.lose&&m.sf.win>0&&m.sf.lose>0).map(m=>{
       const diff=Math.abs(m.sf.win-m.sf.lose);
       const strong=m.sf.win<m.sf.lose?m.a:m.h;
       const weak=m.sf.win<m.sf.lose?m.h:m.a;
-      const pct=Math.round(diff/(m.sf.win+m.sf.lose)*100);
-      return {m:m.a+' vs '+m.h, s:strong, w:weak, p:pct,
-        n:(m.ranks&&m.ranks.length>=2)?('排名 '+m.ranks.join(' / ')):'赔率差 '+diff.toFixed(2)};
+      const pct=Math.round(diff/Math.min(m.sf.win,m.sf.lose)*100);
+      return {away:m.a, home:m.h, s:strong, w:weak, p:pct,
+        n:(m.ranks&&m.ranks.length>=2)?('排名 '+m.ranks.join(' / ')):'胜负赔率差 '+diff.toFixed(2),
+        sf:{win:m.sf.win, lose:m.sf.lose}};
     }).sort((a,b)=>b.p-a.p);
-    // 混合过关（未开赛场次）
-    const parlay=allMatches.filter(m=>!m.settled&&m.sf&&m.sf.win).map((m,i)=>({
-      id:'b'+(i+1), m:(m.sf.win<m.sf.lose?'':'')+m.a+' 胜',
-      t:(m.lg||'NBA')+' · '+m.tm, o:m.sf.win||1.5
-    }));
-    // 高手推荐
-    const experts=allMatches.filter(m=>m.sf&&m.sf.win).map(m=>{
-      const winProb=m.sf.win>0?(100/(m.sf.win/(1/m.sf.win+1/m.sf.lose))).toFixed(0):'—';
-      const sel=m.sf.win<m.sf.lose?m.a:m.h;
-      return {n:m.num, r:winProb+'%', k:m.lg, t:sel+' 胜', g:(Math.abs(m.sf.win-m.sf.lose)>1?'冷门型':'稳健型')};
+    // 混合过关（未开赛场次，含盘口赔率）
+    const parlay=allMatches.filter(m=>!m.settled&&m.sf&&m.sf.win&&m.sf.win>0).map((m,i)=>{
+      const aImp=1/m.sf.win, hImp=1/m.sf.lose;
+      const recSide=(aImp>hImp)?(m.a+' 客胜'):(m.h+' 主胜');
+      const recOdds=(aImp>hImp)?m.sf.win:m.sf.lose;
+      return {num:m.num, lg:m.lg, tm:m.tm, away:m.a, home:m.h,
+        sf_win:m.sf.win, sf_lose:m.sf.lose,
+        rfsf_line:(m.rfsf&&m.rfsf.line)?m.rfsf.line:'',
+        rfsf_away:(m.rfsf&&m.rfsf.away_sp)?m.rfsf.away_sp:'',
+        rfsf_home:(m.rfsf&&m.rfsf.home_sp)?m.rfsf.home_sp:'',
+        dxf_line:(m.dxf&&m.dxf.line)?m.dxf.line:'',
+        dxf_over:(m.dxf&&m.dxf.over_sp)?m.dxf.over_sp:'',
+        dxf_under:(m.dxf&&m.dxf.under_sp)?m.dxf.under_sp:'',
+        rec_side:recSide, rec_odds:recOdds};
     });
-    // 比分预测
-    const score=allMatches.filter(m=>m.dxf&&m.dxf.line).map(m=>{
+    // 高手推荐：基于赔率隐含概率
+    const experts=allMatches.filter(m=>m.sf&&m.sf.win&&m.sf.win>0&&m.sf.lose>0).map(m=>{
+      const aImp=1/m.sf.win, hImp=1/m.sf.lose;
+      const total=aImp+hImp;
+      const aProb=Math.round(aImp/total*100);
+      const hProb=100-aProb;
+      const selProb=Math.max(aProb,hProb);
+      const selSide=aProb>hProb?(m.a+' 客胜'):(m.h+' 主胜');
+      const recOdds=aProb>hProb?m.sf.win:m.sf.lose;
+      return {num:m.num, lg:m.lg, prob:selProb+'%', t:selSide,
+        g:(Math.abs(m.sf.win-m.sf.lose)>0.8?'冷门型':'稳健型'),
+        away:m.a, home:m.h, sf_win:m.sf.win, sf_lose:m.sf.lose, rec_odds:recOdds};
+    });
+    // 比分预测：根据大小分预设总分 + 胜负概率推算
+    const score=allMatches.filter(m=>m.dxf&&m.dxf.line&&m.sf&&m.sf.win&&m.sf.win>0&&m.sf.lose>0).map(m=>{
       const total=m.dxf.line;
       const half=Math.round(total/2);
-      const aWin=m.sf.win<m.sf.lose;
-      const preds=aWin?[
-        [m.a+' '+half+':'+(total-half),32],
-        [m.h+' '+(half+3)+':'+(total-half-3),22],
-        [m.a+' '+half+' :'+half,16]
-      ]:[
-
-        [m.h+' '+(total-half+2)+':'+(half-2),32],
-        [m.a+' '+(half-1)+':'+(total-half+1),22],
-        [m.h+' '+half+' :'+half,16]
-      ];
-      return {m:m.a+' vs '+m.h, t:preds, n:'预设总分 '+total+'，推算最可能比分'};
+      const aImp=1/m.sf.win, hImp=1/m.sf.lose;
+      const aProb=Math.round(aImp/(aImp+hImp)*100);
+      if(aImp>hImp){
+        return {away:m.a, home:m.h, total:total,
+          sf_win:m.sf.win, sf_lose:m.sf.lose,
+          preds:[[m.a+' '+half+':'+(total-half),Math.max(28,aProb-12)],
+                 [m.a+' '+(half-3)+':'+(total-half+3),Math.max(18,Math.round((100-aProb)*0.4))],
+                 [m.h+' '+Math.round(total*0.4)+':'+Math.round(total*0.6),Math.max(10,100-aProb-8)]],
+          note:'预设总分 '+total+'，客队胜率约 '+aProb+'%'};
+      }else{
+        return {away:m.a, home:m.h, total:total,
+          sf_win:m.sf.win, sf_lose:m.sf.lose,
+          preds:[[m.h+' '+(total-half+1)+':'+(half-1),Math.max(28,100-aProb-12)],
+                 [m.a+' '+(half-2)+':'+(total-half+2),Math.max(18,Math.round(aProb*0.4))],
+                 [m.h+' '+half+' :'+half,Math.max(10,aProb-8)]],
+          note:'预设总分 '+total+'，主队胜率约 '+(100-aProb)+'%'};
+      }
     });
     DB.basketball={
       name:'竞彩篮球', cols:['主胜','让分','总分'],
@@ -460,7 +483,16 @@ function bbCurDay(days){
   if(state.histDay){const f=days.find(y=>y.date===state.histDay);if(f)return f;}
   return days[0];
 }
-function oddsF(v){return (v===null||v===undefined||isNaN(v))?'—':(+v).toFixed(2);}
+function oddsF(v){return (v===null||v===undefined||isNaN(v)||v===0)?'—':(+v).toFixed(2);}
+function bbMatchHeader(m){
+  return '<div class="row" style="flex-wrap:wrap;gap:6px">'+
+    (m.num?'<span class="mnum">'+m.num+'</span>':'')+
+    '<span class="lg">'+m.lg+'</span>'+
+    '<span class="tm">'+m.tm+'</span>'+
+    (m.score?'<span class="scorebig" style="font-size:14px">'+m.score+'</span>':'')+
+    '<span class="badge '+(m.settled?'':'g')+'">'+(m.settled?'已完赛':'未开赛')+'</span></div>'+
+    '<div class="vs" style="font-size:13px;margin:5px 0 2px"><b>'+m.a+'</b> <span style="color:#6d83a5;margin:0 4px">客</span><span style="color:#6d83a5">@</span> <span style="color:#6d83a5;margin:0 4px">主</span> <b>'+m.h+'</b></div>';
+}
 function renderBasketballSchedule(){
   const days=bbDays();
   const cur=bbCurDay(days);
@@ -471,24 +503,16 @@ function renderBasketballSchedule(){
     (settled?' · ✅ '+settled+' 场已开奖':'')+'</div></div>';
   html+=dateBar(days,cur,'按日期查看');
   cur.matches.forEach(m=>{
-    html+='<div class="card"><div class="row" style="flex-wrap:wrap;gap:6px">'+
-      (m.num?'<span class="mnum">'+m.num+'</span>':'')+
-      '<span class="lg">'+m.lg+'</span>'+
-      (m.score?'<span class="scorebig" style="font-size:14px">'+m.score+'</span>':'')+
-      '<span class="tm">'+m.tm+'</span>'+
-      (m.ranks&&m.ranks.length?'<span class="mini" style="color:#6d83a5">'+m.ranks.join(' / ')+'</span>':'')+
-      '<span class="badge '+(m.settled?'':'g')+'">'+(m.settled?'已完':'未开赛')+'</span></div>'+
-      '<div class="vs" style="font-size:13px;margin:5px 0 2px">'+m.a+
-      ' <span style="color:#6d83a5">vs</span> '+m.h+'</div>'+
+    html+='<div class="card">'+bbMatchHeader(m)+
       '<div class="oddsmini">'+
-      (m.sf&&m.sf.win?'<span>客胜<i>'+oddsF(m.sf.win)+'</i></span><span>主胜<i>'+oddsF(m.sf.lose)+'</i></span>':'')+
-      (m.rfsf&&m.rfsf.line?'<span>让分'+m.rfsf.line+'<i>'+oddsF(m.rfsf.away_sp)+'/'+oddsF(m.rfsf.home_sp)+'</i></span>':'')+
-      (m.dxf&&m.dxf.line?'<span>总分'+m.dxf.line+'<i>'+oddsF(m.dxf.over_sp)+'/'+oddsF(m.dxf.under_sp)+'</i></span>':'')+
+      (m.sf&&m.sf.win?'<span>客胜（'+m.a+'）<i>'+oddsF(m.sf.win)+'</i></span><span>主胜（'+m.h+'）<i>'+oddsF(m.sf.lose)+'</i></span>':'')+
+      (m.rfsf&&m.rfsf.line?'<span>让分 '+m.rfsf.line+'<i>'+oddsF(m.rfsf.away_sp)+' / '+oddsF(m.rfsf.home_sp)+'</i></span>':'')+
+      (m.dxf&&m.dxf.line?'<span>总分 '+m.dxf.line+'<i>'+oddsF(m.dxf.over_sp)+' / '+oddsF(m.dxf.under_sp)+'</i></span>':'')+
       '</div>'+
       (m.sfc&&Object.keys(m.sfc).length?
         '<details class="resfold"><summary>胜分差 12 项赔率 ▾</summary>'+
         '<div class="mini" style="margin-top:4px">'+
-        Object.keys(m.sfc).map(k=>k+': <b>'+oddsF(m.sfc[k])+'</b>').join(' · ')+
+        Object.keys(m.sfc).map(k=>k+'：<b>'+oddsF(m.sfc[k])+'</b>').join(' &nbsp; ')+
         '</div></details>':'')+
       (m.settled&&m.result&&m.result.sf?
         '<div class="settledbar">✅ 赛果：'+m.result.sf+' / 让分'+(m.result.rf||'')+' / 总分'+(m.result.dx||'')+' / 胜分差'+(m.result.sfc||'')+'</div>'
@@ -504,18 +528,18 @@ function renderBasketballOdds(){
     '<div class="mini" style="width:100%;margin-top:4px">来源：500 彩票网 · 让分胜负 / 大小分 / 胜分差 12 项</div></div>';
   html+=dateBar(days,cur,'按日期查看');
   cur.matches.forEach(m=>{
-    html+='<div class="card"><div class="row" style="flex-wrap:wrap;gap:6px">'+
-      (m.num?'<span class="mnum">'+m.num+'</span>':'')+
-      '<span class="lg">'+m.lg+'</span>'+
-      (m.score?'<span class="scorebig" style="font-size:14px">'+m.score+'</span>':'')+
-      '</div>'+
-      '<div class="vs" style="font-size:13px;margin:5px 0 2px">'+m.a+' <span style="color:#6d83a5">vs</span> '+m.h+'</div>';
+    html+='<div class="card">'+bbMatchHeader(m);
     if(m.rfsf&&m.rfsf.line){
       const fav=m.rfsf.line>0?m.a:m.h;
-      html+='<div class="mini">让分胜负 · <b>'+fav+' 让 '+Math.abs(m.rfsf.line)+'</b> 分 · 客 '+oddsF(m.rfsf.away_sp)+' / 主 '+oddsF(m.rfsf.home_sp)+'</div>';
+      const ud=m.rfsf.line>0?m.h:m.a;
+      html+='<div class="mini">让分胜负 · <b>'+fav+' 让 '+Math.abs(m.rfsf.line)+'</b> 分给 '+ud+
+        ' · 客 '+oddsF(m.rfsf.away_sp)+' / 主 '+oddsF(m.rfsf.home_sp)+'</div>';
     }
     if(m.dxf&&m.dxf.line){
       html+='<div class="mini">大小分 · 预设总分 <b>'+m.dxf.line+'</b> · 大 '+oddsF(m.dxf.over_sp)+' / 小 '+oddsF(m.dxf.under_sp)+'</div>';
+    }
+    if(m.sf&&m.sf.win){
+      html+='<div class="mini">胜负 · 客 <b>'+m.a+'</b> '+oddsF(m.sf.win)+' / 主 <b>'+m.h+'</b> '+oddsF(m.sf.lose)+'</div>';
     }
     if(m.sfc&&Object.keys(m.sfc).length){
       html+='<div class="mini" style="margin-top:4px"><b>胜分差 12 项：</b></div>'+
@@ -536,13 +560,15 @@ function renderBasketballStrength(){
     '<div class="mini" style="width:100%;margin-top:4px">强度差 = |主胜赔率 − 客胜赔率|，差值越大说明强弱越悬殊</div></div>';
   html+=dateBar(days,cur,'按日期查看');
   rows.forEach(r=>{
-    html+='<div class="card"><div class="vs" style="font-size:14px">'+r.m+'</div>'+
+    html+='<div class="card">'+
+      '<div class="vs" style="font-size:13px;margin:5px 0 2px"><b>'+r.away+'</b> <span style="color:#6d83a5;margin:0 4px">客</span>@<span style="color:#6d83a5;margin:0 4px">主</span> <b>'+r.home+'</b></div>'+
       '<div class="stscore"><div><div class="n">强势方</div><div class="v" style="color:#39d6a8">'+r.s+'</div></div>'+
-      '<div class="v">'+r.p+'</div>'+
+      '<div><div class="n">强度差</div><div class="v">'+r.p+'%</div></div>'+
       '<div><div class="n">弱势方</div><div class="v" style="color:#ff8b95">'+r.w+'</div></div></div>'+
       '<div class="stbar"><i style="width:'+Math.min(100,r.p*2)+'%"></i></div>'+
       '<div class="mini" style="margin-top:6px">'+r.n+'</div>'+
-      '<div class="mini" style="color:#6d83a5">强度差 '+r.p+'%（差值越大，强弱越悬殊）</div></div>';
+      (r.sf?'<div class="mini" style="color:#6d83a5">胜负赔率：'+r.away+' '+oddsF(r.sf.win)+' / '+r.home+' '+oddsF(r.sf.lose)+'</div>':'')+
+      '</div>';
   });
   return html;
 }
@@ -552,20 +578,27 @@ function renderBasketballParlay(){
   if(!cur)return '<div class="srcbar warn">⚪ <b>篮球混合过关暂不可用</b></div>';
   const rows=DB.basketball.parlay;
   let html='<div class="srcbar">🟢 <b>竞彩篮球 · 混合过关</b>'+
-    '<div class="mini" style="width:100%;margin-top:4px">选择 2-8 场组成串关，赔率相乘即为组合赔率</div></div>';
+    '<div class="mini" style="width:100%;margin-top:4px">选择 2-8 场组成串关，赔率相乘即为组合赔率。以下为未开赛场次可串关组合。</div></div>';
   if(!rows.length){
     html+='<div class="srcbar warn">⚪ <b>当前销售期无未开赛场次</b> · 请等待下一销售期开售</div>';
     return html;
   }
   rows.forEach(item=>{
-    html+='<div class="card"><div class="row">'+
-      '<span class="lg">'+(item.t||'')+'</span></div>'+
-      '<div class="vs" style="font-size:13px;margin:5px 0 2px">'+item.m+'</div>'+
-      '<div class="oddsmini"><span>赔率 <i>'+oddsF(item.o)+'</i></span></div></div>';
+    html+='<div class="card"><div class="row" style="flex-wrap:wrap;gap:6px">'+
+      '<span class="mnum">'+(item.num||'')+'</span>'+
+      '<span class="lg">'+(item.lg||'')+'</span>'+
+      '<span class="tm">'+(item.tm||'')+'</span></div>'+
+      '<div class="vs" style="font-size:13px;margin:5px 0 2px"><b>'+item.away+'</b> <span style="color:#6d83a5;margin:0 4px">客</span>@<span style="color:#6d83a5;margin:0 4px">主</span> <b>'+item.home+'</b></div>'+
+      '<div class="oddsmini">'+
+      '<span>胜负 · 客 <i>'+oddsF(item.sf_win)+'</i> / 主 <i>'+oddsF(item.sf_lose)+'</i></span>'+
+      (item.rfsf_line?'<span>让分 '+item.rfsf_line+'<i>'+oddsF(item.rfsf_away)+' / '+oddsF(item.rfsf_home)+'</i></span>':'')+
+      (item.dxf_line?'<span>总分 '+item.dxf_line+'<i>'+oddsF(item.dxf_over)+' / '+oddsF(item.dxf_under)+'</i></span>':'')+
+      '</div>'+
+      '<div class="mini" style="margin-top:4px">推荐：<b>'+item.rec_side+' '+oddsF(item.rec_odds)+'</b></div></div>';
   });
   if(rows.length>=2){
-    const c2=rows[0].o*rows[1].o;
-    const c3=rows.length>=3?rows[0].o*rows[1].o*rows[2].o:0;
+    const c2=rows[0].rec_odds*rows[1].rec_odds;
+    const c3=rows.length>=3?rows[0].rec_odds*rows[1].rec_odds*rows[2].rec_odds:0;
     html+='<div class="calc"><div>🎯 推荐组合</div>'+
       '<div>2串1（前2场）· 组合赔率 <b>'+c2.toFixed(2)+'</b></div>'+
       (c3?'<div>3串1（前3场）· 组合赔率 <b>'+c3.toFixed(2)+'</b></div>':'')+
@@ -583,13 +616,15 @@ function renderBasketballExperts(){
     '<div class="mini" style="width:100%;margin-top:4px">基于赔率隐含概率推算，非真人荐单，仅供参考</div></div>';
   html+=dateBar(days,cur,'按日期查看');
   rows.forEach(r=>{
-    const prob=parseFloat(r.r);
+    const prob=parseFloat(r.prob);
     const cls=prob>70?'g':(prob>50?'':'y');
     html+='<div class="card"><div class="row" style="flex-wrap:wrap;gap:6px">'+
-      '<span class="mnum">'+r.n+'</span><span class="lg">'+r.k+'</span>'+
-      '<span class="badge '+cls+'">隐含 '+r.r+'</span></div>'+
-      '<div class="vs" style="font-size:14px;margin:5px 0 2px;color:#ffb547">📊 '+r.t+'</div>'+
-      '<div class="mini">类型：'+r.g+' · 赔率约 '+(100/prob).toFixed(2)+'</div></div>';
+      '<span class="mnum">'+r.num+'</span><span class="lg">'+r.lg+'</span>'+
+      '<span class="badge '+cls+'">隐含 '+r.prob+'</span></div>'+
+      '<div class="vs" style="font-size:13px;margin:5px 0 2px"><b>'+r.away+'</b> <span style="color:#6d83a5;margin:0 4px">客</span>@<span style="color:#6d83a5;margin:0 4px">主</span> <b>'+r.home+'</b></div>'+
+      '<div style="color:#ffb547;margin:4px 0">📊 推荐：<b>'+r.t+'</b></div>'+
+      '<div class="oddsmini"><span>胜负 · 客 <i>'+oddsF(r.sf_win)+'</i> / 主 <i>'+oddsF(r.sf_lose)+'</i></span></div>'+
+      '<div class="mini">类型：'+r.g+' · 推荐赔率 '+oddsF(r.rec_odds)+'</div></div>';
   });
   return html;
 }
@@ -603,18 +638,19 @@ function renderBasketballScore(){
     '<div class="mini" style="width:100%;margin-top:4px">根据大小分预设总分反推，概率按赔率归一化，仅供参考</div></div>';
   html+=dateBar(days,cur,'按日期查看');
   rows.forEach(r=>{
-    html+='<div class="card"><div class="vs" style="font-size:13px;margin:5px 0 2px">'+r.m+'</div>';
-    r.t.forEach(pred=>{
-      const parts=pred[0].split(' ');
-      const sc=parts.length>1?parts[1]:pred[0];
-      html+='<div class="scoreline"><span class="s">'+sc+'</span>'+
+    html+='<div class="card">'+
+      '<div class="vs" style="font-size:13px;margin:5px 0 2px"><b>'+r.away+'</b> <span style="color:#6d83a5;margin:0 4px">客</span>@<span style="color:#6d83a5;margin:0 4px">主</span> <b>'+r.home+'</b></div>'+
+      '<div class="mini" style="margin-bottom:6px">预设总分 <b>'+r.total+'</b> · 胜负：客 '+oddsF(r.sf_win)+' / 主 '+oddsF(r.sf_lose)+'</div>';
+    r.preds.forEach(pred=>{
+      html+='<div class="scoreline"><span class="s">'+pred[0]+'</span>'+
         '<span class="p"><i style="width:'+Math.min(100,pred[1]*3)+'%"></i></span>'+
         '<span class="v">'+pred[1]+'%</span></div>';
     });
-    html+='<div class="mini" style="margin-top:6px">'+r.n+'</div></div>';
+    html+='<div class="mini" style="margin-top:6px;color:#6d83a5">'+r.note+'</div></div>';
   });
   return html;
 }
+
 const BB_RENDER=[renderBasketballSchedule,renderBasketballOdds,renderBasketballStrength,renderBasketballParlay,renderBasketballExperts,renderBasketballScore];
 
 /* ===== 登录解锁：仓库只存 AES-256-GCM 密文，密码不在任何公开文件里 ===== */
