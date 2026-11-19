@@ -2,10 +2,11 @@ name: 每日竞彩篮球数据抓取
 
 on:
   schedule:
-    # 北京时间: 02:00 06:00 08:00 10:00 12:00 14:00 16:00 18:00 20:00 22:00 00:00
-    # 覆盖全天，确保赛果能及时回填
+    # 北京时间: 每2小时一次，覆盖全天
     - cron: '0 18 * * *'
+    - cron: '0 20 * * *'
     - cron: '0 22 * * *'
+    - cron: '0 0 * * *'
     - cron: '0 2 * * *'
     - cron: '0 4 * * *'
     - cron: '0 6 * * *'
@@ -14,7 +15,6 @@ on:
     - cron: '0 12 * * *'
     - cron: '0 14 * * *'
     - cron: '0 16 * * *'
-    - cron: '0 20 * * *'
   workflow_dispatch:
 
 permissions:
@@ -34,8 +34,14 @@ jobs:
       - name: 检出仓库
         uses: actions/checkout@v4
 
-      - name: 抓取竞彩篮球赛程/赔率/赛果并加密输出
+      - name: 抓取竞彩篮球赛程/赔率/赛果
         run: python3 fetch_basketball.py
+
+      - name: 从500抓取赛果回填
+        run: |
+          if [ -f scripts/fill_results.py ]; then
+            python3 scripts/fill_results.py || echo "赛果回填跳过"
+          fi
 
       - name: 有变化才提交
         run: |
