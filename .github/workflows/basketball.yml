@@ -1,0 +1,58 @@
+name: 每日竞彩篮球数据抓取
+
+on:
+  schedule:
+    - cron: '0 22 * * *'
+    - cron: '0 4 * * *'
+    - cron: '0 10 * * *'
+    - cron: '0 16 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-basketball
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      SITE_PASS: ${{ secrets.SITE_PASS }}
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+
+      - name: 抓取竞彩篮球赛程/赔率/赛果并加密输出
+        run: python3 fetch_basketball.py
+
+      - name: 有变化才提交
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.com"
+          if git diff --quiet -- basketball.enc; then
+            echo "篮球加密数据无变化，跳过提交"
+          else
+            git add basketball.enc basketball.json
+            git commit -m "自动更新竞彩篮球数据 $(date -u +%Y-%m-%dT%H:%MZ)"
+            git pull --rebase origin main
+            git push
+          fi
+
+      - name: 输出统计
+        run: |
+          python3 - <<'PY'
+          import json, os
+          if not os.path.exists('basketball.json'):
+              print('未生成basketball.json')
+              raise SystemExit(0)
+          with open('basketball.json', encoding='utf-8') as f:
+              d = json.load(f)
+          print('更新时间:', d.get('updated_at'), '| 数据源:', d.get('source'), '| real:', d.get('real'))
+          for ds in d.get('days_order', []):
+              x = d['days'][ds]
+              settled = sum(1 for m in x['matches'] if m.get('settled'))
+              print('  %s(%s) %d 场，已开奖 %d 场' % (x['date'], x.get('weekday',''), x['count'], settled))
+          PY
