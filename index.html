@@ -736,7 +736,6 @@ try{Object.assign(state,JSON.parse(localStorage.getItem(KEY)||'{}'));}catch(e){}
 function save(){localStorage.setItem(KEY,JSON.stringify(state));}
 function $(id){return document.getElementById(id);}
 
-const oddsF=v=>(v===null||v===undefined||isNaN(v))?'—':(+v).toFixed(2);
 function fmtOdds(o,label){
   if(!o)return '';
   return '<div class="mini" style="margin-top:8px;color:#8fa6c8">'+(label||'胜平负奖金')+' · 胜/平/负</div>'+
