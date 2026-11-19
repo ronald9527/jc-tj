@@ -1,0 +1,53 @@
+
+name: 篮球真实数据抓取
+on:
+  workflow_dispatch:
+  push:
+    paths: ['.github/workflows/basketball_fetch2.yml']
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: 抓取四种玩法真实数据
+        run: |
+          python3 - << 'PY'
+          import urllib.request, os, json
+          HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0 Safari/537.36', 'Referer': 'https://www.500.com/'}
+          PAGES = {
+              '胜负': 313,
+              '让分胜负': 275,
+              '大小分': 281,
+              '胜分差': 291,
+          }
+          os.makedirs('basketball_pages2', exist_ok=True)
+          for name, pid in PAGES.items():
+              ok = False
+              for d in ['2026-11-18','2026-11-17','2026-11-16','2026-11-19']:
+                  u = f'https://trade.500.com/jclq/?date={d}&g=2&playid={pid}'
+                  try:
+                      req = urllib.request.Request(u, headers=HEADERS)
+                      with urllib.request.urlopen(req, timeout=25) as r:
+                          raw = r.read()
+                      try: t = raw.decode('gb18030', errors='replace')
+                      except: t = raw.decode('utf-8', errors='replace')
+                      with open(f'basketball_pages2/{name}_{d}.html','w',encoding='utf-8') as f:
+                          f.write(t)
+                      print(f'{name} {d}: {len(t)} bytes, matchnum={t.count("data-matchnum")}')
+                      ok = True
+                      break
+                  except Exception as e:
+                      print(f'{name} {d}: ERROR {e}')
+              if not ok:
+                  with open(f'basketball_pages2/{name}_ERROR.txt','w') as f:
+                      f.write('ALL_FAILED')
+          PY
+      - name: 提交
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.com"
+          git add basketball_pages2/
+          git commit -m "篮球四种玩法真实页面 $(date -u +%H:%M:%SZ)" || echo "no changes"
+          git push
