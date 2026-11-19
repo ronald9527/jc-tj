@@ -384,7 +384,7 @@ async function loadBasketballData(){
     days.forEach(date=>{
       const day=j.days[date];
       const ms=(day.matches||[]).map(m=>({
-        num:m.match_id, lg:m.league, tm:m.kickoff, h:m.home, a:m.away,
+        num:(m.num||m.match_id||m.matchnum||''), lg:m.league, tm:m.kickoff, h:m.home, a:m.away,
         st:m.settled?'已完赛':(m.score?'已结束':'未开赛'),
         score:m.score||'', away_score:m.away_score, home_score:m.home_score,
         sf:m.sf||{}, rfsf:m.rfsf||{}, dxf:m.dxf||{}, sfc:m.sfc||{},
@@ -474,7 +474,8 @@ function bbDays(){
   return BB_DATA.days.map(date=>{
     const ms=BB_DATA.matchesByDate[date]||[];
     const settled=ms.filter(m=>m.settled).length;
-    const wd=ms[0]?ms[0].num.slice(0,2):'';
+    const first=ms[0]||{};
+    const wd=String(first.num||first.match_id||first.matchnum||'').slice(0,2);
     return {date, weekday:wd, label:'', count:ms.length, matches:ms, settled};
   });
 }
@@ -721,7 +722,9 @@ function loadEncrypted(key,alsoProbe){
   }).then(()=>{
     // 篮球数据独立加载，不依赖加密
     if(state.sport==='basketball'){
-      return loadBasketballData().then(bd=>{ if(bd)render(); });
+      return loadBasketballData().then(bd=>{ if(bd)render(); }).catch(e=>{
+        console.warn('篮球数据加载失败(不影响已登录):', e);
+      });
     }
   });
 }
