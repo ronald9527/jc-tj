@@ -2,26 +2,265 @@
   "v": 1,
   "real": true,
   "source": "500彩票网竞彩篮球（国内数据）",
-  "updated_at": "2026-11-19 16:45:11",
-  "date_label": "周四 2026-11-19",
+  "updated_at": "2026-11-20 02:45:04",
   "days": {
+    "2026-11-20": {
+      "date": "2026-11-20",
+      "weekday": "五",
+      "count": 7,
+      "matches": [
+        {
+          "matchnum": "周四302",
+          "away": "巴斯克尼亚",
+          "home": "拜仁慕尼黑",
+          "league": "",
+          "kickoff": "",
+          "score": "",
+          "ranks": [],
+          "settled": false,
+          "sf": {
+            "win": 3.24,
+            "lose": 1.15
+          },
+          "rfsf": {
+            "line": -8.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 177.5,
+            "over_sp": 1.66,
+            "under_sp": 1.74
+          },
+          "sfc": {
+            "客胜1-5": 6.3,
+            "客胜6-10": 6.8,
+            "客胜11-15": 15.0,
+            "客胜16-20": 25.0,
+            "客胜21-25": 34.0,
+            "客胜26+": 50.0
+          }
+        },
+        {
+          "matchnum": "周四303",
+          "away": "费内巴切",
+          "home": "米兰",
+          "league": "",
+          "kickoff": "",
+          "score": "",
+          "ranks": [],
+          "settled": false,
+          "sf": {
+            "win": 1.26,
+            "lose": 2.6
+          },
+          "rfsf": {
+            "line": 4.5,
+            "away_sp": 1.65,
+            "home_sp": 1.75
+          },
+          "dxf": {
+            "line": 165.5,
+            "over_sp": 1.62,
+            "under_sp": 1.78
+          },
+          "sfc": {
+            "客胜1-5": 3.9,
+            "客胜6-10": 3.6,
+            "客胜11-15": 5.2,
+            "客胜16-20": 9.0,
+            "客胜21-25": 14.0,
+            "客胜26+": 16.0
+          }
+        },
+        {
+          "matchnum": "周四304",
+          "away": "博洛尼亚",
+          "home": "巴伦西亚",
+          "league": "",
+          "kickoff": "",
+          "score": "",
+          "ranks": [],
+          "settled": false,
+          "sf": {
+            "win": 4.4,
+            "lose": 1.05
+          },
+          "rfsf": {
+            "line": -11.5,
+            "away_sp": 1.75,
+            "home_sp": 1.65
+          },
+          "dxf": {
+            "line": 186.5,
+            "over_sp": 1.62,
+            "under_sp": 1.78
+          },
+          "sfc": {
+            "客胜1-5": 9.2,
+            "客胜6-10": 12.0,
+            "客胜11-15": 24.0,
+            "客胜16-20": 38.0,
+            "客胜21-25": 53.0,
+            "客胜26+": 80.0
+          }
+        },
+        {
+          "matchnum": "周四305",
+          "away": "洛杉矶快船",
+          "home": "圣安东尼奥马刺",
+          "league": "",
+          "kickoff": "",
+          "score": "",
+          "ranks": [
+            "西部第12",
+            "西部第2"
+          ],
+          "settled": false,
+          "sf": {
+            "win": null,
+            "lose": null
+          },
+          "rfsf": {
+            "line": -16.5,
+            "away_sp": 1.65,
+            "home_sp": 1.75
+          },
+          "dxf": {
+            "line": 226.5,
+            "over_sp": 1.66,
+            "under_sp": 1.74
+          },
+          "sfc": {
+            "客胜1-5": 16.0,
+            "客胜6-10": 19.0,
+            "客胜11-15": 34.0,
+            "客胜16-20": 44.0,
+            "客胜21-25": 70.0,
+            "客胜26+": 90.0
+          }
+        },
+        {
+          "matchnum": "周四306",
+          "away": "金州勇士",
+          "home": "孟菲斯灰熊",
+          "league": "",
+          "kickoff": "",
+          "score": "",
+          "ranks": [
+            "西部第10",
+            "西部第4"
+          ],
+          "settled": false,
+          "sf": {
+            "win": 3.15,
+            "lose": 1.16
+          },
+          "rfsf": {
+            "line": -8.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 228.5,
+            "over_sp": 1.66,
+            "under_sp": 1.74
+          },
+          "sfc": {
+            "客胜1-5": 7.6,
+            "客胜6-10": 7.75,
+            "客胜11-15": 17.0,
+            "客胜16-20": 22.0,
+            "客胜21-25": 32.0,
+            "客胜26+": 50.0
+          }
+        },
+        {
+          "matchnum": "周四307",
+          "away": "波特兰开拓者",
+          "home": "密尔沃基雄鹿",
+          "league": "",
+          "kickoff": "",
+          "score": "",
+          "ranks": [
+            "西部第6",
+            "东部第15"
+          ],
+          "settled": false,
+          "sf": {
+            "win": 1.07,
+            "lose": 4.08
+          },
+          "rfsf": {
+            "line": 10.5,
+            "away_sp": 1.65,
+            "home_sp": 1.75
+          },
+          "dxf": {
+            "line": 229.5,
+            "over_sp": 1.66,
+            "under_sp": 1.74
+          },
+          "sfc": {
+            "客胜1-5": 5.7,
+            "客胜6-10": 3.7,
+            "客胜11-15": 4.1,
+            "客胜16-20": 5.7,
+            "客胜21-25": 7.7,
+            "客胜26+": 7.0
+          }
+        },
+        {
+          "matchnum": "周四308",
+          "away": "纽约尼克斯",
+          "home": "明尼苏达森林狼",
+          "league": "",
+          "kickoff": "",
+          "score": "",
+          "ranks": [
+            "东部第6",
+            "西部第5"
+          ],
+          "settled": false,
+          "sf": {
+            "win": 1.52,
+            "lose": 1.92
+          },
+          "rfsf": {
+            "line": 2.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 216.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
+          },
+          "sfc": {
+            "客胜1-5": 4.35,
+            "客胜6-10": 4.65,
+            "客胜11-15": 7.5,
+            "客胜16-20": 11.0,
+            "客胜21-25": 16.0,
+            "客胜26+": 18.0
+          }
+        }
+      ]
+    },
     "2026-11-19": {
       "date": "2026-11-19",
       "weekday": "四",
       "count": 8,
       "matches": [
         {
-          "match_id": "周四301",
-          "num": "周四301",
-          "league": "澳大利亚篮球联赛",
+          "matchnum": "周四301",
           "away": "阿德莱德36人",
           "home": "伊拉瓦拉老鹰",
-          "kickoff": "11-19 16:30",
-          "score": "",
-          "away_score": null,
-          "home_score": null,
+          "league": "",
+          "kickoff": "",
+          "score": "97:103",
           "ranks": [],
-          "settled": false,
+          "settled": true,
           "sf": {
             "win": 1.39,
             "lose": 2.18
@@ -32,81 +271,73 @@
             "home_sp": 1.7
           },
           "dxf": {
-            "line": 197.5,
-            "over_sp": 1.7,
-            "under_sp": 1.7
+            "line": 196.5,
+            "over_sp": 1.66,
+            "under_sp": 1.74
           },
           "sfc": {
             "客胜1-5": 5.5,
-            "客胜6-10": 4.7,
+            "客胜6-10": 4.4,
             "客胜11-15": 5.5,
             "客胜16-20": 7.8,
             "客胜21-25": 12.5,
-            "客胜26+": 10.0,
-            "主胜1-5": 5.9,
-            "主胜6-10": 6.0,
-            "主胜11-15": 10.0,
-            "主胜16-20": 14.0,
-            "主胜21-25": 17.0,
-            "主胜26+": 23.0
+            "客胜26+": 10.0
+          },
+          "away_score": 97,
+          "home_score": 103,
+          "total_score": 200,
+          "diff": 6,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "over",
+            "sfc": "主胜6-10"
           }
         },
         {
-          "match_id": "周四302",
-          "num": "周四302",
-          "league": "欧篮联",
-          "away": "巴斯克",
+          "matchnum": "周四302",
+          "away": "巴斯克尼亚",
           "home": "拜仁慕尼黑",
-          "kickoff": "11-20 03:00",
+          "league": "",
+          "kickoff": "",
           "score": "",
-          "away_score": null,
-          "home_score": null,
           "ranks": [],
           "settled": false,
           "sf": {
-            "win": 2.78,
-            "lose": 1.22
+            "win": 3.24,
+            "lose": 1.15
           },
           "rfsf": {
-            "line": -7.5,
-            "away_sp": 1.75,
-            "home_sp": 1.65
+            "line": -8.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
           },
           "dxf": {
             "line": 177.5,
-            "over_sp": 1.65,
-            "under_sp": 1.62
+            "over_sp": 1.66,
+            "under_sp": 1.74
           },
           "sfc": {
-            "客胜1-5": 9.5,
-            "客胜6-10": 10.0,
-            "客胜11-15": 12.0,
-            "客胜16-20": 16.0,
-            "客胜21-25": 25.0,
-            "客胜26+": 30.0,
-            "主胜1-5": 3.2,
-            "主胜6-10": 3.8,
-            "主胜11-15": 5.5,
-            "主胜16-20": 9.0,
-            "主胜21-25": 15.0,
-            "主胜26+": 20.0
+            "客胜1-5": 6.3,
+            "客胜6-10": 6.8,
+            "客胜11-15": 15.0,
+            "客胜16-20": 25.0,
+            "客胜21-25": 34.0,
+            "客胜26+": 50.0
           }
         },
         {
-          "match_id": "周四303",
-          "num": "周四303",
-          "league": "欧篮联",
+          "matchnum": "周四303",
           "away": "费内巴切",
-          "home": "米兰奥林匹亚",
-          "kickoff": "11-20 03:30",
+          "home": "米兰",
+          "league": "",
+          "kickoff": "",
           "score": "",
-          "away_score": null,
-          "home_score": null,
           "ranks": [],
           "settled": false,
           "sf": {
-            "win": 1.33,
-            "lose": 2.34
+            "win": 1.26,
+            "lose": 2.6
           },
           "rfsf": {
             "line": 4.5,
@@ -115,34 +346,25 @@
           },
           "dxf": {
             "line": 165.5,
-            "over_sp": 1.75,
-            "under_sp": 1.62
+            "over_sp": 1.62,
+            "under_sp": 1.78
           },
           "sfc": {
-            "客胜1-5": 3.8,
-            "客胜6-10": 4.2,
-            "客胜11-15": 5.8,
-            "客胜16-20": 9.5,
-            "客胜21-25": 17.0,
-            "客胜26+": 22.0,
-            "主胜1-5": 6.5,
-            "主胜6-10": 7.0,
-            "主胜11-15": 11.0,
-            "主胜16-20": 16.0,
-            "主胜21-25": 28.0,
-            "主胜26+": 35.0
+            "客胜1-5": 3.9,
+            "客胜6-10": 3.6,
+            "客胜11-15": 5.2,
+            "客胜16-20": 9.0,
+            "客胜21-25": 14.0,
+            "客胜26+": 16.0
           }
         },
         {
-          "match_id": "周四304",
-          "num": "周四304",
-          "league": "欧篮联",
+          "matchnum": "周四304",
           "away": "博洛尼亚",
           "home": "巴伦西亚",
-          "kickoff": "11-20 04:00",
+          "league": "",
+          "kickoff": "",
           "score": "",
-          "away_score": null,
-          "home_score": null,
           "ranks": [],
           "settled": false,
           "sf": {
@@ -150,43 +372,34 @@
             "lose": 1.05
           },
           "rfsf": {
-            "line": -10.5,
-            "away_sp": 1.81,
-            "home_sp": 1.6
+            "line": -11.5,
+            "away_sp": 1.75,
+            "home_sp": 1.65
           },
           "dxf": {
-            "line": 185.5,
-            "over_sp": 1.65,
-            "under_sp": 1.62
+            "line": 186.5,
+            "over_sp": 1.62,
+            "under_sp": 1.78
           },
           "sfc": {
-            "客胜1-5": 15.0,
-            "客胜6-10": 18.0,
-            "客胜11-15": 25.0,
-            "客胜16-20": 40.0,
-            "客胜21-25": 60.0,
-            "客胜26+": 80.0,
-            "主胜1-5": 2.6,
-            "主胜6-10": 3.0,
-            "主胜11-15": 4.2,
-            "主胜16-20": 7.0,
-            "主胜21-25": 12.0,
-            "主胜26+": 16.0
+            "客胜1-5": 9.2,
+            "客胜6-10": 12.0,
+            "客胜11-15": 24.0,
+            "客胜16-20": 38.0,
+            "客胜21-25": 53.0,
+            "客胜26+": 80.0
           }
         },
         {
-          "match_id": "周四305",
-          "num": "周四305",
-          "league": "美职篮",
+          "matchnum": "周四305",
           "away": "洛杉矶快船",
           "home": "圣安东尼奥马刺",
-          "kickoff": "11-20 09:00",
+          "league": "",
+          "kickoff": "",
           "score": "",
-          "away_score": null,
-          "home_score": null,
           "ranks": [
-            "西12",
-            "西2"
+            "西部第12",
+            "西部第2"
           ],
           "settled": false,
           "sf": {
@@ -194,160 +407,127 @@
             "lose": null
           },
           "rfsf": {
-            "line": -15.5,
-            "away_sp": 1.81,
-            "home_sp": 1.6
-          },
-          "dxf": {
-            "line": 227.5,
-            "over_sp": 1.6,
-            "under_sp": 1.66
-          },
-          "sfc": {
-            "客胜1-5": 14.0,
-            "客胜6-10": 16.0,
-            "客胜11-15": 25.0,
-            "客胜16-20": 40.0,
-            "客胜21-25": 60.0,
-            "客胜26+": 80.0,
-            "主胜1-5": 2.2,
-            "主胜6-10": 2.6,
-            "主胜11-15": 4.5,
-            "主胜16-20": 8.0,
-            "主胜21-25": 15.0,
-            "主胜26+": 20.0
-          }
-        },
-        {
-          "match_id": "周四306",
-          "num": "周四306",
-          "league": "美职篮",
-          "away": "金州勇士",
-          "home": "孟菲斯灰熊",
-          "kickoff": "11-20 09:00",
-          "score": "",
-          "away_score": null,
-          "home_score": null,
-          "ranks": [
-            "西10",
-            "西4"
-          ],
-          "settled": false,
-          "sf": {
-            "win": 3.23,
-            "lose": 1.15
-          },
-          "rfsf": {
-            "line": -9.5,
-            "away_sp": 1.81,
-            "home_sp": 1.6
+            "line": -16.5,
+            "away_sp": 1.65,
+            "home_sp": 1.75
           },
           "dxf": {
             "line": 226.5,
-            "over_sp": 1.6,
-            "under_sp": 1.66
+            "over_sp": 1.66,
+            "under_sp": 1.74
           },
           "sfc": {
-            "客胜1-5": 9.0,
-            "客胜6-10": 10.0,
-            "客胜11-15": 15.0,
-            "客胜16-20": 25.0,
-            "客胜21-25": 40.0,
-            "客胜26+": 55.0,
-            "主胜1-5": 3.0,
-            "主胜6-10": 3.5,
-            "主胜11-15": 5.5,
-            "主胜16-20": 10.0,
-            "主胜21-25": 18.0,
-            "主胜26+": 25.0
+            "客胜1-5": 16.0,
+            "客胜6-10": 19.0,
+            "客胜11-15": 34.0,
+            "客胜16-20": 44.0,
+            "客胜21-25": 70.0,
+            "客胜26+": 90.0
           }
         },
         {
-          "match_id": "周四307",
-          "num": "周四307",
-          "league": "美职篮",
-          "away": "波特兰开拓者",
-          "home": "密尔沃基雄鹿",
-          "kickoff": "11-20 09:00",
+          "matchnum": "周四306",
+          "away": "金州勇士",
+          "home": "孟菲斯灰熊",
+          "league": "",
+          "kickoff": "",
           "score": "",
-          "away_score": null,
-          "home_score": null,
           "ranks": [
-            "西6",
-            "东15"
+            "西部第10",
+            "西部第4"
           ],
           "settled": false,
           "sf": {
-            "win": 1.08,
-            "lose": 3.95
+            "win": 3.15,
+            "lose": 1.16
+          },
+          "rfsf": {
+            "line": -8.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 228.5,
+            "over_sp": 1.66,
+            "under_sp": 1.74
+          },
+          "sfc": {
+            "客胜1-5": 7.6,
+            "客胜6-10": 7.75,
+            "客胜11-15": 17.0,
+            "客胜16-20": 22.0,
+            "客胜21-25": 32.0,
+            "客胜26+": 50.0
+          }
+        },
+        {
+          "matchnum": "周四307",
+          "away": "波特兰开拓者",
+          "home": "密尔沃基雄鹿",
+          "league": "",
+          "kickoff": "",
+          "score": "",
+          "ranks": [
+            "西部第6",
+            "东部第15"
+          ],
+          "settled": false,
+          "sf": {
+            "win": 1.07,
+            "lose": 4.08
           },
           "rfsf": {
             "line": 10.5,
-            "away_sp": 1.75,
-            "home_sp": 1.66
+            "away_sp": 1.65,
+            "home_sp": 1.75
           },
           "dxf": {
-            "line": 227.5,
-            "over_sp": 1.74,
-            "under_sp": 1.66
+            "line": 229.5,
+            "over_sp": 1.66,
+            "under_sp": 1.74
           },
           "sfc": {
-            "客胜1-5": 2.8,
-            "客胜6-10": 3.2,
-            "客胜11-15": 5.0,
-            "客胜16-20": 8.5,
-            "客胜21-25": 16.0,
-            "客胜26+": 22.0,
-            "主胜1-5": 10.0,
-            "主胜6-10": 12.0,
-            "主胜11-15": 18.0,
-            "主胜16-20": 30.0,
-            "主胜21-25": 50.0,
-            "主胜26+": 65.0
+            "客胜1-5": 5.7,
+            "客胜6-10": 3.7,
+            "客胜11-15": 4.1,
+            "客胜16-20": 5.7,
+            "客胜21-25": 7.7,
+            "客胜26+": 7.0
           }
         },
         {
-          "match_id": "周四308",
-          "num": "周四308",
-          "league": "美职篮",
+          "matchnum": "周四308",
           "away": "纽约尼克斯",
           "home": "明尼苏达森林狼",
-          "kickoff": "11-20 09:00",
+          "league": "",
+          "kickoff": "",
           "score": "",
-          "away_score": null,
-          "home_score": null,
           "ranks": [
-            "东6",
-            "西5"
+            "东部第6",
+            "西部第5"
           ],
           "settled": false,
           "sf": {
-            "win": 1.55,
-            "lose": 1.87
+            "win": 1.52,
+            "lose": 1.92
           },
           "rfsf": {
-            "line": 1.5,
-            "away_sp": 1.75,
-            "home_sp": 1.66
+            "line": 2.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
           },
           "dxf": {
-            "line": 217.5,
-            "over_sp": 1.74,
-            "under_sp": 1.66
+            "line": 216.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
           },
           "sfc": {
-            "客胜1-5": 4.2,
-            "客胜6-10": 4.8,
-            "客胜11-15": 6.8,
+            "客胜1-5": 4.35,
+            "客胜6-10": 4.65,
+            "客胜11-15": 7.5,
             "客胜16-20": 11.0,
-            "客胜21-25": 19.0,
-            "客胜26+": 25.0,
-            "主胜1-5": 4.8,
-            "主胜6-10": 5.5,
-            "主胜11-15": 9.0,
-            "主胜16-20": 15.0,
-            "主胜21-25": 26.0,
-            "主胜26+": 35.0
+            "客胜21-25": 16.0,
+            "客胜26+": 18.0
           }
         }
       ]
@@ -393,9 +573,9 @@
           "total_score": 197,
           "diff": 5,
           "result": {
-            "sf": "客胜",
-            "rfsf": "客胜",
-            "dxf": "大分",
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "over",
             "sfc": "客胜1-5"
           }
         },
@@ -435,9 +615,9 @@
           "total_score": 162,
           "diff": 4,
           "result": {
-            "sf": "主胜",
-            "rfsf": "主胜",
-            "dxf": "小分",
+            "sf": "home_win",
+            "rfsf": "away_win",
+            "dxf": "under",
             "sfc": "主胜1-5"
           }
         },
@@ -448,7 +628,10 @@
           "league": "",
           "kickoff": "",
           "score": "130:137",
-          "ranks": [],
+          "ranks": [
+            "东部第15",
+            "东部第5"
+          ],
           "settled": true,
           "sf": {
             "win": null,
@@ -477,9 +660,9 @@
           "total_score": 267,
           "diff": 7,
           "result": {
-            "sf": "主胜",
-            "rfsf": "客胜",
-            "dxf": "大分",
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "over",
             "sfc": "主胜6-10"
           }
         },
@@ -490,7 +673,10 @@
           "league": "",
           "kickoff": "",
           "score": "121:116",
-          "ranks": [],
+          "ranks": [
+            "东部第1",
+            "东部第8"
+          ],
           "settled": true,
           "sf": {
             "win": 1.44,
@@ -519,9 +705,9 @@
           "total_score": 237,
           "diff": 5,
           "result": {
-            "sf": "客胜",
-            "rfsf": "客胜",
-            "dxf": "大分",
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "over",
             "sfc": "客胜1-5"
           }
         },
@@ -532,7 +718,10 @@
           "league": "",
           "kickoff": "",
           "score": "119:104",
-          "ranks": [],
+          "ranks": [
+            "西部第3",
+            "东部第10"
+          ],
           "settled": true,
           "sf": {
             "win": 1.11,
@@ -561,9 +750,9 @@
           "total_score": 223,
           "diff": 15,
           "result": {
-            "sf": "客胜",
-            "rfsf": "客胜",
-            "dxf": "小分",
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "under",
             "sfc": "客胜11-15"
           }
         },
@@ -574,7 +763,10 @@
           "league": "",
           "kickoff": "",
           "score": "124:121",
-          "ranks": [],
+          "ranks": [
+            "西部第4",
+            "东部第7"
+          ],
           "settled": true,
           "sf": {
             "win": 2.44,
@@ -603,9 +795,9 @@
           "total_score": 245,
           "diff": 3,
           "result": {
-            "sf": "客胜",
-            "rfsf": "客胜",
-            "dxf": "大分",
+            "sf": "away_win",
+            "rfsf": "home_win",
+            "dxf": "over",
             "sfc": "客胜1-5"
           }
         },
@@ -616,7 +808,10 @@
           "league": "",
           "kickoff": "",
           "score": "137:107",
-          "ranks": [],
+          "ranks": [
+            "东部第12",
+            "东部第14"
+          ],
           "settled": true,
           "sf": {
             "win": 1.92,
@@ -645,9 +840,9 @@
           "total_score": 244,
           "diff": 30,
           "result": {
-            "sf": "客胜",
-            "rfsf": "客胜",
-            "dxf": "大分",
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "over",
             "sfc": "客胜26+"
           }
         },
@@ -658,7 +853,10 @@
           "league": "",
           "kickoff": "",
           "score": "103:99",
-          "ranks": [],
+          "ranks": [
+            "东部第11",
+            "东部第9"
+          ],
           "settled": true,
           "sf": {
             "win": 2.95,
@@ -687,9 +885,9 @@
           "total_score": 202,
           "diff": 4,
           "result": {
-            "sf": "客胜",
-            "rfsf": "客胜",
-            "dxf": "小分",
+            "sf": "away_win",
+            "rfsf": "home_win",
+            "dxf": "under",
             "sfc": "客胜1-5"
           }
         },
@@ -700,7 +898,10 @@
           "league": "",
           "kickoff": "",
           "score": "94:116",
-          "ranks": [],
+          "ranks": [
+            "西部第10",
+            "西部第9"
+          ],
           "settled": true,
           "sf": {
             "win": 2.95,
@@ -729,9 +930,9 @@
           "total_score": 210,
           "diff": 22,
           "result": {
-            "sf": "主胜",
-            "rfsf": "主胜",
-            "dxf": "小分",
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "under",
             "sfc": "主胜21-25"
           }
         },
@@ -742,7 +943,10 @@
           "league": "",
           "kickoff": "",
           "score": "117:112",
-          "ranks": [],
+          "ranks": [
+            "东部第4",
+            "西部第8"
+          ],
           "settled": true,
           "sf": {
             "win": 3.32,
@@ -771,9 +975,9 @@
           "total_score": 229,
           "diff": 5,
           "result": {
-            "sf": "客胜",
-            "rfsf": "客胜",
-            "dxf": "小分",
+            "sf": "away_win",
+            "rfsf": "home_win",
+            "dxf": "under",
             "sfc": "客胜1-5"
           }
         },
@@ -784,7 +988,10 @@
           "league": "",
           "kickoff": "",
           "score": "122:109",
-          "ranks": [],
+          "ranks": [
+            "东部第3",
+            "西部第13"
+          ],
           "settled": true,
           "sf": {
             "win": 1.14,
@@ -813,9 +1020,9 @@
           "total_score": 231,
           "diff": 13,
           "result": {
-            "sf": "客胜",
-            "rfsf": "客胜",
-            "dxf": "大分",
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "over",
             "sfc": "客胜11-15"
           }
         },
@@ -826,7 +1033,10 @@
           "league": "",
           "kickoff": "",
           "score": "101:105",
-          "ranks": [],
+          "ranks": [
+            "东部第2",
+            "西部第7"
+          ],
           "settled": true,
           "sf": {
             "win": 1.52,
@@ -855,9 +1065,9 @@
           "total_score": 206,
           "diff": 4,
           "result": {
-            "sf": "主胜",
-            "rfsf": "主胜",
-            "dxf": "小分",
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "under",
             "sfc": "主胜1-5"
           }
         },
@@ -868,7 +1078,10 @@
           "league": "",
           "kickoff": "",
           "score": "128:107",
-          "ranks": [],
+          "ranks": [
+            "西部第11",
+            "西部第15"
+          ],
           "settled": true,
           "sf": {
             "win": 1.16,
@@ -897,9 +1110,9 @@
           "total_score": 235,
           "diff": 21,
           "result": {
-            "sf": "客胜",
-            "rfsf": "客胜",
-            "dxf": "大分",
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "over",
             "sfc": "客胜21-25"
           }
         },
@@ -909,9 +1122,12 @@
           "home": "洛杉矶湖人",
           "league": "",
           "kickoff": "",
-          "score": "",
-          "ranks": [],
-          "settled": false,
+          "score": "109:97",
+          "ranks": [
+            "西部第14",
+            "西部第1"
+          ],
+          "settled": true,
           "sf": {
             "win": 4.4,
             "lose": 1.05
@@ -933,13 +1149,2386 @@
             "客胜16-20": 25.0,
             "客胜21-25": 50.0,
             "客胜26+": 66.0
+          },
+          "away_score": 109,
+          "home_score": 97,
+          "total_score": 206,
+          "diff": 12,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "under",
+            "sfc": "客胜11-15"
+          }
+        }
+      ]
+    },
+    "2026-11-17": {
+      "date": "2026-11-17",
+      "weekday": "二",
+      "count": 11,
+      "matches": [
+        {
+          "matchnum": "周二301",
+          "away": "伊斯坦布尔埃菲斯",
+          "home": "迪拜",
+          "league": "",
+          "kickoff": "",
+          "score": "75:80",
+          "ranks": [],
+          "settled": true,
+          "sf": {
+            "win": 3.24,
+            "lose": 1.15
+          },
+          "rfsf": {
+            "line": -7.5,
+            "away_sp": 1.75,
+            "home_sp": 1.65
+          },
+          "dxf": {
+            "line": 176.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
+          },
+          "sfc": {
+            "客胜1-5": 7.3,
+            "客胜6-10": 8.2,
+            "客胜11-15": 18.0,
+            "客胜16-20": 28.0,
+            "客胜21-25": 40.0,
+            "客胜26+": 58.0
+          },
+          "away_score": 75,
+          "home_score": 80,
+          "total_score": 155,
+          "diff": 5,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "under",
+            "sfc": "主胜1-5"
+          }
+        },
+        {
+          "matchnum": "周二302",
+          "away": "阿斯维尔",
+          "home": "费内巴切",
+          "league": "",
+          "kickoff": "",
+          "score": "81:115",
+          "ranks": [],
+          "settled": true,
+          "sf": {
+            "win": null,
+            "lose": null
+          },
+          "rfsf": {
+            "line": -12.5,
+            "away_sp": 1.75,
+            "home_sp": 1.65
+          },
+          "dxf": {
+            "line": 167.5,
+            "over_sp": 1.66,
+            "under_sp": 1.74
+          },
+          "sfc": {
+            "客胜1-5": 12.0,
+            "客胜6-10": 18.0,
+            "客胜11-15": 32.0,
+            "客胜16-20": 48.0,
+            "客胜21-25": 70.0,
+            "客胜26+": 100.0
+          },
+          "away_score": 81,
+          "home_score": 115,
+          "total_score": 196,
+          "diff": 34,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "over",
+            "sfc": "主胜26+"
+          }
+        },
+        {
+          "matchnum": "周二303",
+          "away": "贝尔格莱德红星",
+          "home": "米兰",
+          "league": "",
+          "kickoff": "",
+          "score": "77:91",
+          "ranks": [],
+          "settled": true,
+          "sf": {
+            "win": 1.46,
+            "lose": 2.03
+          },
+          "rfsf": {
+            "line": 3.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 166.5,
+            "over_sp": 1.66,
+            "under_sp": 1.74
+          },
+          "sfc": {
+            "客胜1-5": 3.95,
+            "客胜6-10": 4.0,
+            "客胜11-15": 6.3,
+            "客胜16-20": 11.0,
+            "客胜21-25": 18.0,
+            "客胜26+": 20.0
+          },
+          "away_score": 77,
+          "home_score": 91,
+          "total_score": 168,
+          "diff": 14,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "over",
+            "sfc": "主胜11-15"
+          }
+        },
+        {
+          "matchnum": "周二304",
+          "away": "巴黎",
+          "home": "巴塞罗那",
+          "league": "",
+          "kickoff": "",
+          "score": "89:86",
+          "ranks": [],
+          "settled": true,
+          "sf": {
+            "win": 2.78,
+            "lose": 1.22
+          },
+          "rfsf": {
+            "line": -5.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 189.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
+          },
+          "sfc": {
+            "客胜1-5": 6.7,
+            "客胜6-10": 7.3,
+            "客胜11-15": 16.0,
+            "客胜16-20": 26.0,
+            "客胜21-25": 35.0,
+            "客胜26+": 52.0
+          },
+          "away_score": 89,
+          "home_score": 86,
+          "total_score": 175,
+          "diff": 3,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "home_win",
+            "dxf": "under",
+            "sfc": "客胜1-5"
+          }
+        },
+        {
+          "matchnum": "周二305",
+          "away": "巴伦西亚",
+          "home": "贝尔格莱德游击",
+          "league": "",
+          "kickoff": "",
+          "score": "76:64",
+          "ranks": [],
+          "settled": true,
+          "sf": {
+            "win": 1.65,
+            "lose": 1.75
+          },
+          "rfsf": {
+            "line": 1.5,
+            "away_sp": 1.75,
+            "home_sp": 1.65
+          },
+          "dxf": {
+            "line": 175.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
+          },
+          "sfc": {
+            "客胜1-5": 4.2,
+            "客胜6-10": 4.3,
+            "客胜11-15": 7.1,
+            "客胜16-20": 13.0,
+            "客胜21-25": 21.0,
+            "客胜26+": 26.0
+          },
+          "away_score": 76,
+          "home_score": 64,
+          "total_score": 140,
+          "diff": 12,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "under",
+            "sfc": "客胜11-15"
+          }
+        },
+        {
+          "matchnum": "周二306",
+          "away": "帕纳辛纳科斯",
+          "home": "博洛尼亚",
+          "league": "",
+          "kickoff": "",
+          "score": "79:84",
+          "ranks": [],
+          "settled": true,
+          "sf": {
+            "win": 1.1,
+            "lose": 3.7
+          },
+          "rfsf": {
+            "line": 8.5,
+            "away_sp": 1.65,
+            "home_sp": 1.75
+          },
+          "dxf": {
+            "line": 169.5,
+            "over_sp": 1.66,
+            "under_sp": 1.74
+          },
+          "sfc": {
+            "客胜1-5": 4.7,
+            "客胜6-10": 3.35,
+            "客胜11-15": 4.3,
+            "客胜16-20": 6.0,
+            "客胜21-25": 8.5,
+            "客胜26+": 9.0
+          },
+          "away_score": 79,
+          "home_score": 84,
+          "total_score": 163,
+          "diff": 5,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "away_win",
+            "dxf": "under",
+            "sfc": "主胜1-5"
+          }
+        },
+        {
+          "matchnum": "周二307",
+          "away": "纽约尼克斯",
+          "home": "多伦多猛龙",
+          "league": "",
+          "kickoff": "",
+          "score": "111:102",
+          "ranks": [
+            "东部第6",
+            "东部第9"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 1.4,
+            "lose": 2.15
+          },
+          "rfsf": {
+            "line": 2.5,
+            "away_sp": 1.65,
+            "home_sp": 1.75
+          },
+          "dxf": {
+            "line": 216.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
+          },
+          "sfc": {
+            "客胜1-5": 4.1,
+            "客胜6-10": 4.3,
+            "客胜11-15": 6.6,
+            "客胜16-20": 9.2,
+            "客胜21-25": 16.0,
+            "客胜26+": 15.0
+          },
+          "away_score": 111,
+          "home_score": 102,
+          "total_score": 213,
+          "diff": 9,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "under",
+            "sfc": "客胜6-10"
+          }
+        },
+        {
+          "matchnum": "周二308",
+          "away": "波特兰开拓者",
+          "home": "明尼苏达森林狼",
+          "league": "",
+          "kickoff": "",
+          "score": "105:106",
+          "ranks": [
+            "西部第6",
+            "西部第4"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 1.92,
+            "lose": 1.52
+          },
+          "rfsf": {
+            "line": -2.5,
+            "away_sp": 1.65,
+            "home_sp": 1.75
+          },
+          "dxf": {
+            "line": 227.5,
+            "over_sp": 1.66,
+            "under_sp": 1.74
+          },
+          "sfc": {
+            "客胜1-5": 5.3,
+            "客胜6-10": 5.45,
+            "客胜11-15": 10.0,
+            "客胜16-20": 15.0,
+            "客胜21-25": 22.0,
+            "客胜26+": 28.0
+          },
+          "away_score": 105,
+          "home_score": 106,
+          "total_score": 211,
+          "diff": 1,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "under",
+            "sfc": "主胜1-5"
+          }
+        },
+        {
+          "matchnum": "周二309",
+          "away": "底特律活塞",
+          "home": "圣安东尼奥马刺",
+          "league": "",
+          "kickoff": "",
+          "score": "105:93",
+          "ranks": [
+            "东部第3",
+            "西部第2"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 3.95,
+            "lose": 1.08
+          },
+          "rfsf": {
+            "line": -10.5,
+            "away_sp": 1.75,
+            "home_sp": 1.65
+          },
+          "dxf": {
+            "line": 225.5,
+            "over_sp": 1.66,
+            "under_sp": 1.74
+          },
+          "sfc": {
+            "客胜1-5": 8.9,
+            "客胜6-10": 10.0,
+            "客胜11-15": 15.0,
+            "客胜16-20": 25.0,
+            "客胜21-25": 54.0,
+            "客胜26+": 62.0
+          },
+          "away_score": 105,
+          "home_score": 93,
+          "total_score": 198,
+          "diff": 12,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "under",
+            "sfc": "客胜11-15"
+          }
+        },
+        {
+          "matchnum": "周二310",
+          "away": "犹他爵士",
+          "home": "洛杉矶快船",
+          "league": "",
+          "kickoff": "",
+          "score": "132:107",
+          "ranks": [
+            "西部第14",
+            "西部第13"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 2.78,
+            "lose": 1.22
+          },
+          "rfsf": {
+            "line": -7.5,
+            "away_sp": 1.75,
+            "home_sp": 1.65
+          },
+          "dxf": {
+            "line": 229.5,
+            "over_sp": 1.66,
+            "under_sp": 1.74
+          },
+          "sfc": {
+            "客胜1-5": 6.6,
+            "客胜6-10": 6.9,
+            "客胜11-15": 14.0,
+            "客胜16-20": 18.0,
+            "客胜21-25": 32.0,
+            "客胜26+": 42.0
+          },
+          "away_score": 132,
+          "home_score": 107,
+          "total_score": 239,
+          "diff": 25,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "over",
+            "sfc": "客胜21-25"
+          }
+        },
+        {
+          "matchnum": "周二311",
+          "away": "夏洛特黄蜂",
+          "home": "洛杉矶湖人",
+          "league": "",
+          "kickoff": "",
+          "score": "114:118",
+          "ranks": [
+            "东部第11",
+            "西部第1"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 3.5,
+            "lose": 1.12
+          },
+          "rfsf": {
+            "line": -7.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 226.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
+          },
+          "sfc": {
+            "客胜1-5": 8.35,
+            "客胜6-10": 8.65,
+            "客胜11-15": 15.0,
+            "客胜16-20": 23.0,
+            "客胜21-25": 40.0,
+            "客胜26+": 45.0
+          },
+          "away_score": 114,
+          "home_score": 118,
+          "total_score": 232,
+          "diff": 4,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "over",
+            "sfc": "主胜1-5"
+          }
+        }
+      ]
+    },
+    "2026-11-16": {
+      "date": "2026-11-16",
+      "weekday": "一",
+      "count": 8,
+      "matches": [
+        {
+          "matchnum": "周一301",
+          "away": "奥兰多魔术",
+          "home": "波士顿凯尔特人",
+          "league": "",
+          "kickoff": "",
+          "score": "115:105",
+          "ranks": [
+            "东部第8",
+            "东部第2"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 4.25,
+            "lose": 1.06
+          },
+          "rfsf": {
+            "line": -9.5,
+            "away_sp": 1.65,
+            "home_sp": 1.75
+          },
+          "dxf": {
+            "line": 215.5,
+            "over_sp": 1.66,
+            "under_sp": 1.74
+          },
+          "sfc": {
+            "客胜1-5": 9.3,
+            "客胜6-10": 11.0,
+            "客胜11-15": 19.0,
+            "客胜16-20": 24.0,
+            "客胜21-25": 42.0,
+            "客胜26+": 54.0
+          },
+          "away_score": 115,
+          "home_score": 105,
+          "total_score": 220,
+          "diff": 10,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "over",
+            "sfc": "客胜6-10"
+          }
+        },
+        {
+          "matchnum": "周一302",
+          "away": "孟菲斯灰熊",
+          "home": "华盛顿奇才",
+          "league": "",
+          "kickoff": "",
+          "score": "136:120",
+          "ranks": [
+            "西部第4",
+            "东部第12"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 1.36,
+            "lose": 2.25
+          },
+          "rfsf": {
+            "line": 4.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 233.5,
+            "over_sp": 1.66,
+            "under_sp": 1.74
+          },
+          "sfc": {
+            "客胜1-5": 4.9,
+            "客胜6-10": 4.1,
+            "客胜11-15": 5.6,
+            "客胜16-20": 7.3,
+            "客胜21-25": 10.0,
+            "客胜26+": 9.5
+          },
+          "away_score": 136,
+          "home_score": 120,
+          "total_score": 256,
+          "diff": 16,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "over",
+            "sfc": "客胜16-20"
+          }
+        },
+        {
+          "matchnum": "周一303",
+          "away": "芝加哥公牛",
+          "home": "克利夫兰骑士",
+          "league": "",
+          "kickoff": "",
+          "score": "115:126",
+          "ranks": [
+            "东部第13",
+            "东部第7"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 4.08,
+            "lose": 1.07
+          },
+          "rfsf": {
+            "line": -9.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 241.5,
+            "over_sp": 1.74,
+            "under_sp": 1.66
+          },
+          "sfc": {
+            "客胜1-5": 8.8,
+            "客胜6-10": 10.0,
+            "客胜11-15": 18.0,
+            "客胜16-20": 25.0,
+            "客胜21-25": 62.0,
+            "客胜26+": 70.0
+          },
+          "away_score": 115,
+          "home_score": 126,
+          "total_score": 241,
+          "diff": 11,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "under",
+            "sfc": "主胜11-15"
+          }
+        },
+        {
+          "matchnum": "周一304",
+          "away": "休斯敦火箭",
+          "home": "迈阿密热火",
+          "league": "",
+          "kickoff": "",
+          "score": "110:128",
+          "ranks": [
+            "西部第3",
+            "东部第5"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 1.48,
+            "lose": 1.99
+          },
+          "rfsf": {
+            "line": 2.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 232.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
+          },
+          "sfc": {
+            "客胜1-5": 4.2,
+            "客胜6-10": 4.4,
+            "客胜11-15": 7.0,
+            "客胜16-20": 9.4,
+            "客胜21-25": 16.0,
+            "客胜26+": 18.0
+          },
+          "away_score": 110,
+          "home_score": 128,
+          "total_score": 238,
+          "diff": 18,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "over",
+            "sfc": "主胜16-20"
+          }
+        },
+        {
+          "matchnum": "周一305",
+          "away": "费城76人",
+          "home": "布鲁克林篮网",
+          "league": "",
+          "kickoff": "",
+          "score": "135:123",
+          "ranks": [
+            "东部第1",
+            "东部第14"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 1.16,
+            "lose": 3.15
+          },
+          "rfsf": {
+            "line": 8.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 226.5,
+            "over_sp": 1.62,
+            "under_sp": 1.78
+          },
+          "sfc": {
+            "客胜1-5": 4.5,
+            "客胜6-10": 3.7,
+            "客胜11-15": 5.0,
+            "客胜16-20": 6.9,
+            "客胜21-25": 10.0,
+            "客胜26+": 11.0
+          },
+          "away_score": 135,
+          "home_score": 123,
+          "total_score": 258,
+          "diff": 12,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "over",
+            "sfc": "客胜11-15"
+          }
+        },
+        {
+          "matchnum": "周一306",
+          "away": "波特兰开拓者",
+          "home": "明尼苏达森林狼",
+          "league": "",
+          "kickoff": "",
+          "score": "98:106",
+          "ranks": [
+            "西部第6",
+            "西部第5"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 1.81,
+            "lose": 1.6
+          },
+          "rfsf": {
+            "line": -2.5,
+            "away_sp": 1.65,
+            "home_sp": 1.75
+          },
+          "dxf": {
+            "line": 231.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
+          },
+          "sfc": {
+            "客胜1-5": 4.8,
+            "客胜6-10": 5.1,
+            "客胜11-15": 9.5,
+            "客胜16-20": 14.5,
+            "客胜21-25": 22.0,
+            "客胜26+": 25.0
+          },
+          "away_score": 98,
+          "home_score": 106,
+          "total_score": 204,
+          "diff": 8,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "under",
+            "sfc": "主胜6-10"
+          }
+        },
+        {
+          "matchnum": "周一307",
+          "away": "金州勇士",
+          "home": "新奥尔良鹈鹕",
+          "league": "",
+          "kickoff": "",
+          "score": "94:115",
+          "ranks": [
+            "西部第9",
+            "西部第13"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 1.48,
+            "lose": 1.99
+          },
+          "rfsf": {
+            "line": 3.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 226.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
+          },
+          "sfc": {
+            "客胜1-5": 4.15,
+            "客胜6-10": 4.4,
+            "客胜11-15": 6.6,
+            "客胜16-20": 9.2,
+            "客胜21-25": 14.0,
+            "客胜26+": 13.0
+          },
+          "away_score": 94,
+          "home_score": 115,
+          "total_score": 209,
+          "diff": 21,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "under",
+            "sfc": "主胜21-25"
+          }
+        },
+        {
+          "matchnum": "周一308",
+          "away": "菲尼克斯太阳",
+          "home": "丹佛掘金",
+          "league": "",
+          "kickoff": "",
+          "score": "117:105",
+          "ranks": [
+            "西部第11",
+            "西部第8"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 4.25,
+            "lose": 1.06
+          },
+          "rfsf": {
+            "line": -10.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 229.5,
+            "over_sp": 1.74,
+            "under_sp": 1.66
+          },
+          "sfc": {
+            "客胜1-5": 9.3,
+            "客胜6-10": 11.0,
+            "客胜11-15": 20.0,
+            "客胜16-20": 27.0,
+            "客胜21-25": 66.0,
+            "客胜26+": 74.0
+          },
+          "away_score": 117,
+          "home_score": 105,
+          "total_score": 222,
+          "diff": 12,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "under",
+            "sfc": "客胜11-15"
+          }
+        }
+      ]
+    },
+    "2026-11-15": {
+      "date": "2026-11-15",
+      "weekday": "日",
+      "count": 20,
+      "matches": [
+        {
+          "matchnum": "周日301",
+          "away": "塔斯马尼亚跳蚁",
+          "home": "布里斯班子弹",
+          "league": "",
+          "kickoff": "",
+          "score": "104:92",
+          "ranks": [],
+          "settled": true,
+          "sf": {
+            "win": 1.65,
+            "lose": 1.75
+          },
+          "rfsf": {
+            "line": 1.5,
+            "away_sp": 1.75,
+            "home_sp": 1.65
+          },
+          "dxf": {
+            "line": 184.5,
+            "over_sp": 1.66,
+            "under_sp": 1.74
+          },
+          "sfc": {
+            "客胜1-5": 4.7,
+            "客胜6-10": 4.9,
+            "客胜11-15": 7.4,
+            "客胜16-20": 10.0,
+            "客胜21-25": 14.0,
+            "客胜26+": 16.0
+          },
+          "away_score": 104,
+          "home_score": 92,
+          "total_score": 196,
+          "diff": 12,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "over",
+            "sfc": "客胜11-15"
+          }
+        },
+        {
+          "matchnum": "周日302",
+          "away": "拉科鲁尼亚",
+          "home": "巴伦西亚",
+          "league": "",
+          "kickoff": "",
+          "score": "97:111",
+          "ranks": [],
+          "settled": true,
+          "sf": {
+            "win": null,
+            "lose": null
+          },
+          "rfsf": {
+            "line": -17.5,
+            "away_sp": 1.75,
+            "home_sp": 1.65
+          },
+          "dxf": {
+            "line": 190.5,
+            "over_sp": 1.66,
+            "under_sp": 1.74
+          },
+          "sfc": {
+            "客胜1-5": 22.0,
+            "客胜6-10": 34.0,
+            "客胜11-15": 65.0,
+            "客胜16-20": 90.0,
+            "客胜21-25": 130.0,
+            "客胜26+": 180.0
+          },
+          "away_score": 97,
+          "home_score": 111,
+          "total_score": 208,
+          "diff": 14,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "over",
+            "sfc": "主胜11-15"
+          }
+        },
+        {
+          "matchnum": "周日303",
+          "away": "曼雷萨",
+          "home": "列伊达",
+          "league": "",
+          "kickoff": "",
+          "score": "98:92",
+          "ranks": [],
+          "settled": true,
+          "sf": {
+            "win": 2.06,
+            "lose": 1.44
+          },
+          "rfsf": {
+            "line": -3.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 191.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
+          },
+          "sfc": {
+            "客胜1-5": 5.3,
+            "客胜6-10": 5.5,
+            "客胜11-15": 10.0,
+            "客胜16-20": 17.0,
+            "客胜21-25": 20.0,
+            "客胜26+": 28.0
+          },
+          "away_score": 98,
+          "home_score": 92,
+          "total_score": 190,
+          "diff": 6,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "under",
+            "sfc": "客胜6-10"
+          }
+        },
+        {
+          "matchnum": "周日304",
+          "away": "赫罗纳",
+          "home": "马拉加",
+          "league": "",
+          "kickoff": "",
+          "score": "70:82",
+          "ranks": [],
+          "settled": true,
+          "sf": {
+            "win": null,
+            "lose": null
+          },
+          "rfsf": {
+            "line": -13.5,
+            "away_sp": 1.75,
+            "home_sp": 1.65
+          },
+          "dxf": {
+            "line": 181.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
+          },
+          "sfc": {
+            "客胜1-5": 13.0,
+            "客胜6-10": 16.0,
+            "客胜11-15": 29.0,
+            "客胜16-20": 48.0,
+            "客胜21-25": 70.0,
+            "客胜26+": 130.0
+          },
+          "away_score": 70,
+          "home_score": 82,
+          "total_score": 152,
+          "diff": 12,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "under",
+            "sfc": "主胜11-15"
+          }
+        },
+        {
+          "matchnum": "周日305",
+          "away": "费希塔",
+          "home": "罗斯托克海狼",
+          "league": "",
+          "kickoff": "",
+          "score": "75:86",
+          "ranks": [
+            "第14",
+            "第2"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 2.64,
+            "lose": 1.25
+          },
+          "rfsf": {
+            "line": -4.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 174.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
+          },
+          "sfc": {
+            "客胜1-5": 6.6,
+            "客胜6-10": 6.7,
+            "客胜11-15": 13.0,
+            "客胜16-20": 19.0,
+            "客胜21-25": 27.0,
+            "客胜26+": 37.0
+          },
+          "away_score": 75,
+          "home_score": 86,
+          "total_score": 161,
+          "diff": 11,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "under",
+            "sfc": "主胜11-15"
+          }
+        },
+        {
+          "matchnum": "周日306",
+          "away": "特里尔角斗士",
+          "home": "法兰克福",
+          "league": "",
+          "kickoff": "",
+          "score": "99:85",
+          "ranks": [
+            "第7"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 1.39,
+            "lose": 2.18
+          },
+          "rfsf": {
+            "line": 4.5,
+            "away_sp": 1.65,
+            "home_sp": 1.75
+          },
+          "dxf": {
+            "line": 182.5,
+            "over_sp": 1.66,
+            "under_sp": 1.74
+          },
+          "sfc": {
+            "客胜1-5": 3.75,
+            "客胜6-10": 3.8,
+            "客胜11-15": 6.4,
+            "客胜16-20": 9.3,
+            "客胜21-25": 16.0,
+            "客胜26+": 14.0
+          },
+          "away_score": 99,
+          "home_score": 85,
+          "total_score": 184,
+          "diff": 14,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "over",
+            "sfc": "客胜11-15"
+          }
+        },
+        {
+          "matchnum": "周日307",
+          "away": "中部德国人",
+          "home": "拜仁慕尼黑",
+          "league": "",
+          "kickoff": "",
+          "score": "61:91",
+          "ranks": [
+            "第4",
+            "第1"
+          ],
+          "settled": true,
+          "sf": {
+            "win": null,
+            "lose": null
+          },
+          "rfsf": {
+            "line": -15.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 170.5,
+            "over_sp": 1.66,
+            "under_sp": 1.74
+          },
+          "sfc": {
+            "客胜1-5": 14.0,
+            "客胜6-10": 22.0,
+            "客胜11-15": 28.0,
+            "客胜16-20": 70.0,
+            "客胜21-25": 110.0,
+            "客胜26+": 130.0
+          },
+          "away_score": 61,
+          "home_score": 91,
+          "total_score": 152,
+          "diff": 30,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "under",
+            "sfc": "主胜26+"
+          }
+        },
+        {
+          "matchnum": "周日308",
+          "away": "奥布拉多伊罗",
+          "home": "巴塞罗那",
+          "league": "",
+          "kickoff": "",
+          "score": "83:108",
+          "ranks": [],
+          "settled": true,
+          "sf": {
+            "win": null,
+            "lose": null
+          },
+          "rfsf": {
+            "line": -13.5,
+            "away_sp": 1.65,
+            "home_sp": 1.75
+          },
+          "dxf": {
+            "line": 182.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
+          },
+          "sfc": {
+            "客胜1-5": 14.0,
+            "客胜6-10": 22.0,
+            "客胜11-15": 37.0,
+            "客胜16-20": 56.0,
+            "客胜21-25": 80.0,
+            "客胜26+": 120.0
+          },
+          "away_score": 83,
+          "home_score": 108,
+          "total_score": 191,
+          "diff": 25,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "over",
+            "sfc": "主胜21-25"
+          }
+        },
+        {
+          "matchnum": "周日309",
+          "away": "穆尔西亚天主大学",
+          "home": "毕尔巴鄂",
+          "league": "",
+          "kickoff": "",
+          "score": "84:76",
+          "ranks": [],
+          "settled": true,
+          "sf": {
+            "win": 1.95,
+            "lose": 1.5
+          },
+          "rfsf": {
+            "line": -3.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 178.5,
+            "over_sp": 1.66,
+            "under_sp": 1.74
+          },
+          "sfc": {
+            "客胜1-5": 4.55,
+            "客胜6-10": 4.65,
+            "客胜11-15": 8.2,
+            "客胜16-20": 16.0,
+            "客胜21-25": 25.0,
+            "客胜26+": 32.0
+          },
+          "away_score": 84,
+          "home_score": 76,
+          "total_score": 160,
+          "diff": 8,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "under",
+            "sfc": "客胜6-10"
+          }
+        },
+        {
+          "matchnum": "周日310",
+          "away": "不伦瑞克雄狮",
+          "home": "开姆尼茨",
+          "league": "",
+          "kickoff": "",
+          "score": "79:111",
+          "ranks": [
+            "第13",
+            "第16"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 3.6,
+            "lose": 1.11
+          },
+          "rfsf": {
+            "line": -8.5,
+            "away_sp": 1.75,
+            "home_sp": 1.65
+          },
+          "dxf": {
+            "line": 177.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
+          },
+          "sfc": {
+            "客胜1-5": 7.6,
+            "客胜6-10": 8.3,
+            "客胜11-15": 18.0,
+            "客胜16-20": 33.0,
+            "客胜21-25": 46.0,
+            "客胜26+": 62.0
+          },
+          "away_score": 79,
+          "home_score": 111,
+          "total_score": 190,
+          "diff": 32,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "over",
+            "sfc": "主胜26+"
+          }
+        },
+        {
+          "matchnum": "周日311",
+          "away": "皇家马德里",
+          "home": "巴斯克尼亚",
+          "league": "",
+          "kickoff": "",
+          "score": "98:84",
+          "ranks": [],
+          "settled": true,
+          "sf": {
+            "win": 1.22,
+            "lose": 2.78
+          },
+          "rfsf": {
+            "line": 7.5,
+            "away_sp": 1.65,
+            "home_sp": 1.75
+          },
+          "dxf": {
+            "line": 184.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
+          },
+          "sfc": {
+            "客胜1-5": 4.1,
+            "客胜6-10": 3.45,
+            "客胜11-15": 4.9,
+            "客胜16-20": 8.4,
+            "客胜21-25": 12.0,
+            "客胜26+": 14.0
+          },
+          "away_score": 98,
+          "home_score": 84,
+          "total_score": 182,
+          "diff": 14,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "under",
+            "sfc": "客胜11-15"
+          }
+        },
+        {
+          "matchnum": "周日312",
+          "away": "印第安那步行者",
+          "home": "费城76人",
+          "league": "",
+          "kickoff": "",
+          "score": "124:131",
+          "ranks": [
+            "东部第10",
+            "东部第2"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 3.32,
+            "lose": 1.14
+          },
+          "rfsf": {
+            "line": -7.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 227.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
+          },
+          "sfc": {
+            "客胜1-5": 6.4,
+            "客胜6-10": 7.0,
+            "客胜11-15": 16.0,
+            "客胜16-20": 25.0,
+            "客胜21-25": 38.0,
+            "客胜26+": 35.0
+          },
+          "away_score": 124,
+          "home_score": 131,
+          "total_score": 255,
+          "diff": 7,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "over",
+            "sfc": "主胜6-10"
+          }
+        },
+        {
+          "matchnum": "周日313",
+          "away": "洛杉矶湖人",
+          "home": "菲尼克斯太阳",
+          "league": "",
+          "kickoff": "",
+          "score": "131:123",
+          "ranks": [
+            "西部第1",
+            "西部第11"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 1.33,
+            "lose": 2.34
+          },
+          "rfsf": {
+            "line": 4.5,
+            "away_sp": 1.65,
+            "home_sp": 1.75
+          },
+          "dxf": {
+            "line": 230.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
+          },
+          "sfc": {
+            "客胜1-5": 4.2,
+            "客胜6-10": 4.0,
+            "客胜11-15": 5.7,
+            "客胜16-20": 8.4,
+            "客胜21-25": 13.0,
+            "客胜26+": 15.0
+          },
+          "away_score": 131,
+          "home_score": 123,
+          "total_score": 254,
+          "diff": 8,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "over",
+            "sfc": "客胜6-10"
+          }
+        },
+        {
+          "matchnum": "周日314",
+          "away": "夏洛特黄蜂",
+          "home": "洛杉矶快船",
+          "league": "",
+          "kickoff": "",
+          "score": "105:113",
+          "ranks": [
+            "东部第11",
+            "西部第12"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 1.81,
+            "lose": 1.6
+          },
+          "rfsf": {
+            "line": -1.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 214.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
+          },
+          "sfc": {
+            "客胜1-5": 5.2,
+            "客胜6-10": 5.5,
+            "客胜11-15": 10.5,
+            "客胜16-20": 14.0,
+            "客胜21-25": 20.0,
+            "客胜26+": 30.0
+          },
+          "away_score": 105,
+          "home_score": 113,
+          "total_score": 218,
+          "diff": 8,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "over",
+            "sfc": "主胜6-10"
+          }
+        },
+        {
+          "matchnum": "周日315",
+          "away": "圣安东尼奥马刺",
+          "home": "犹他爵士",
+          "league": "",
+          "kickoff": "",
+          "score": "110:102",
+          "ranks": [
+            "西部第2",
+            "西部第15"
+          ],
+          "settled": true,
+          "sf": {
+            "win": null,
+            "lose": null
+          },
+          "rfsf": {
+            "line": 16.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 227.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
+          },
+          "sfc": {
+            "客胜1-5": 11.0,
+            "客胜6-10": 5.1,
+            "客胜11-15": 4.3,
+            "客胜16-20": 4.15,
+            "客胜21-25": 4.45,
+            "客胜26+": 2.7
+          },
+          "away_score": 110,
+          "home_score": 102,
+          "total_score": 212,
+          "diff": 8,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "under",
+            "sfc": "客胜6-10"
+          }
+        },
+        {
+          "matchnum": "周日316",
+          "away": "纽约尼克斯",
+          "home": "多伦多猛龙",
+          "league": "",
+          "kickoff": "",
+          "score": "112:108",
+          "ranks": [
+            "东部第6",
+            "东部第9"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 1.25,
+            "lose": 2.64
+          },
+          "rfsf": {
+            "line": 6.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 218.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
+          },
+          "sfc": {
+            "客胜1-5": 4.2,
+            "客胜6-10": 4.0,
+            "客胜11-15": 6.0,
+            "客胜16-20": 8.7,
+            "客胜21-25": 14.0,
+            "客胜26+": 10.0
+          },
+          "away_score": 112,
+          "home_score": 108,
+          "total_score": 220,
+          "diff": 4,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "over",
+            "sfc": "客胜1-5"
+          }
+        },
+        {
+          "matchnum": "周日317",
+          "away": "达拉斯独行侠",
+          "home": "波士顿凯尔特人",
+          "league": "",
+          "kickoff": "",
+          "score": "94:131",
+          "ranks": [
+            "西部第10",
+            "东部第1"
+          ],
+          "settled": true,
+          "sf": {
+            "win": null,
+            "lose": null
+          },
+          "rfsf": {
+            "line": -13.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 221.5,
+            "over_sp": 1.66,
+            "under_sp": 1.74
+          },
+          "sfc": {
+            "客胜1-5": 14.0,
+            "客胜6-10": 18.0,
+            "客胜11-15": 28.0,
+            "客胜16-20": 46.0,
+            "客胜21-25": 62.0,
+            "客胜26+": 68.0
+          },
+          "away_score": 94,
+          "home_score": 131,
+          "total_score": 225,
+          "diff": 37,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "over",
+            "sfc": "主胜26+"
+          }
+        },
+        {
+          "matchnum": "周日318",
+          "away": "休斯敦火箭",
+          "home": "华盛顿奇才",
+          "league": "",
+          "kickoff": "",
+          "score": "147:119",
+          "ranks": [
+            "西部第3",
+            "东部第12"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 1.08,
+            "lose": 3.95
+          },
+          "rfsf": {
+            "line": 8.5,
+            "away_sp": 1.65,
+            "home_sp": 1.75
+          },
+          "dxf": {
+            "line": 223.5,
+            "over_sp": 1.74,
+            "under_sp": 1.66
+          },
+          "sfc": {
+            "客胜1-5": 5.7,
+            "客胜6-10": 3.7,
+            "客胜11-15": 4.2,
+            "客胜16-20": 5.7,
+            "客胜21-25": 7.7,
+            "客胜26+": 7.0
+          },
+          "away_score": 147,
+          "home_score": 119,
+          "total_score": 266,
+          "diff": 28,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "over",
+            "sfc": "客胜26+"
+          }
+        },
+        {
+          "matchnum": "周日319",
+          "away": "亚特兰大老鹰",
+          "home": "密尔沃基雄鹿",
+          "league": "",
+          "kickoff": "",
+          "score": "113:106",
+          "ranks": [
+            "东部第4",
+            "东部第15"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 1.12,
+            "lose": 3.5
+          },
+          "rfsf": {
+            "line": 7.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 235.5,
+            "over_sp": 1.66,
+            "under_sp": 1.74
+          },
+          "sfc": {
+            "客胜1-5": 4.8,
+            "客胜6-10": 3.5,
+            "客胜11-15": 4.4,
+            "客胜16-20": 6.4,
+            "客胜21-25": 9.3,
+            "客胜26+": 9.0
+          },
+          "away_score": 113,
+          "home_score": 106,
+          "total_score": 219,
+          "diff": 7,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "under",
+            "sfc": "客胜6-10"
+          }
+        },
+        {
+          "matchnum": "周日320",
+          "away": "俄克拉荷马城雷霆",
+          "home": "萨克拉门托国王",
+          "league": "",
+          "kickoff": "",
+          "score": "125:103",
+          "ranks": [
+            "西部第7",
+            "西部第14"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 1.03,
+            "lose": 4.8
+          },
+          "rfsf": {
+            "line": 11.5,
+            "away_sp": 1.65,
+            "home_sp": 1.75
+          },
+          "dxf": {
+            "line": 224.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
+          },
+          "sfc": {
+            "客胜1-5": 6.6,
+            "客胜6-10": 4.1,
+            "客胜11-15": 3.75,
+            "客胜16-20": 5.1,
+            "客胜21-25": 6.5,
+            "客胜26+": 5.2
+          },
+          "away_score": 125,
+          "home_score": 103,
+          "total_score": 228,
+          "diff": 22,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "over",
+            "sfc": "客胜21-25"
+          }
+        }
+      ]
+    },
+    "2026-11-14": {
+      "date": "2026-11-14",
+      "weekday": "六",
+      "count": 14,
+      "matches": [
+        {
+          "matchnum": "周六301",
+          "away": "东南墨尔本凤凰",
+          "home": "墨尔本联",
+          "league": "",
+          "kickoff": "",
+          "score": "95:102",
+          "ranks": [],
+          "settled": true,
+          "sf": {
+            "win": 3.02,
+            "lose": 1.18
+          },
+          "rfsf": {
+            "line": -6.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 203.5,
+            "over_sp": 1.66,
+            "under_sp": 1.74
+          },
+          "sfc": {
+            "客胜1-5": 6.8,
+            "客胜6-10": 8.5,
+            "客胜11-15": 12.0,
+            "客胜16-20": 18.0,
+            "客胜21-25": 30.0,
+            "客胜26+": 29.0
+          },
+          "away_score": 95,
+          "home_score": 102,
+          "total_score": 197,
+          "diff": 7,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "under",
+            "sfc": "主胜6-10"
+          }
+        },
+        {
+          "matchnum": "周六302",
+          "away": "伊拉瓦拉老鹰",
+          "home": "珀斯野猫",
+          "league": "",
+          "kickoff": "",
+          "score": "100:111",
+          "ranks": [],
+          "settled": true,
+          "sf": {
+            "win": 2.01,
+            "lose": 1.47
+          },
+          "rfsf": {
+            "line": -3.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 199.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
+          },
+          "sfc": {
+            "客胜1-5": 5.5,
+            "客胜6-10": 5.7,
+            "客胜11-15": 9.0,
+            "客胜16-20": 13.5,
+            "客胜21-25": 21.0,
+            "客胜26+": 19.0
+          },
+          "away_score": 100,
+          "home_score": 111,
+          "total_score": 211,
+          "diff": 11,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "over",
+            "sfc": "主胜11-15"
+          }
+        },
+        {
+          "matchnum": "周六303",
+          "away": "布尔戈斯",
+          "home": "卢戈",
+          "league": "",
+          "kickoff": "",
+          "score": "110:119",
+          "ranks": [],
+          "settled": true,
+          "sf": {
+            "win": 4.25,
+            "lose": 1.06
+          },
+          "rfsf": {
+            "line": -10.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 191.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
+          },
+          "sfc": {
+            "客胜1-5": 8.4,
+            "客胜6-10": 10.0,
+            "客胜11-15": 21.0,
+            "客胜16-20": 34.0,
+            "客胜21-25": 47.0,
+            "客胜26+": 70.0
+          },
+          "away_score": 110,
+          "home_score": 119,
+          "total_score": 229,
+          "diff": 9,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "over",
+            "sfc": "主胜6-10"
+          }
+        },
+        {
+          "matchnum": "周六304",
+          "away": "波恩",
+          "home": "班堡",
+          "league": "",
+          "kickoff": "",
+          "score": "85:71",
+          "ranks": [
+            "第3",
+            "第11"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 1.6,
+            "lose": 1.81
+          },
+          "rfsf": {
+            "line": 1.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 168.5,
+            "over_sp": 1.74,
+            "under_sp": 1.66
+          },
+          "sfc": {
+            "客胜1-5": 4.15,
+            "客胜6-10": 4.4,
+            "客胜11-15": 7.5,
+            "客胜16-20": 13.0,
+            "客胜21-25": 21.0,
+            "客胜26+": 23.0
+          },
+          "away_score": 85,
+          "home_score": 71,
+          "total_score": 156,
+          "diff": 14,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "under",
+            "sfc": "客胜11-15"
+          }
+        },
+        {
+          "matchnum": "周六305",
+          "away": "耶拿科学城",
+          "home": "乌尔姆",
+          "league": "",
+          "kickoff": "",
+          "score": "78:97",
+          "ranks": [
+            "第17",
+            "第10"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 4.6,
+            "lose": 1.04
+          },
+          "rfsf": {
+            "line": -9.5,
+            "away_sp": 1.75,
+            "home_sp": 1.65
+          },
+          "dxf": {
+            "line": 167.5,
+            "over_sp": 1.74,
+            "under_sp": 1.66
+          },
+          "sfc": {
+            "客胜1-5": 8.8,
+            "客胜6-10": 11.0,
+            "客胜11-15": 22.0,
+            "客胜16-20": 45.0,
+            "客胜21-25": 58.0,
+            "客胜26+": 80.0
+          },
+          "away_score": 78,
+          "home_score": 97,
+          "total_score": 175,
+          "diff": 19,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "over",
+            "sfc": "主胜16-20"
+          }
+        },
+        {
+          "matchnum": "周六306",
+          "away": "特内里费",
+          "home": "安道尔BC",
+          "league": "",
+          "kickoff": "",
+          "score": "90:84",
+          "ranks": [],
+          "settled": true,
+          "sf": {
+            "win": 1.25,
+            "lose": 2.64
+          },
+          "rfsf": {
+            "line": 6.5,
+            "away_sp": 1.65,
+            "home_sp": 1.75
+          },
+          "dxf": {
+            "line": 176.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
+          },
+          "sfc": {
+            "客胜1-5": 4.0,
+            "客胜6-10": 3.5,
+            "客胜11-15": 5.0,
+            "客胜16-20": 8.8,
+            "客胜21-25": 13.0,
+            "客胜26+": 15.0
+          },
+          "away_score": 90,
+          "home_score": 84,
+          "total_score": 174,
+          "diff": 6,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "under",
+            "sfc": "客胜6-10"
+          }
+        },
+        {
+          "matchnum": "周六307",
+          "away": "维尔茨堡",
+          "home": "汉堡塔楼",
+          "league": "",
+          "kickoff": "",
+          "score": "84:91",
+          "ranks": [
+            "第9",
+            "第15"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 1.35,
+            "lose": 2.28
+          },
+          "rfsf": {
+            "line": 4.5,
+            "away_sp": 1.65,
+            "home_sp": 1.75
+          },
+          "dxf": {
+            "line": 169.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
+          },
+          "sfc": {
+            "客胜1-5": 3.95,
+            "客胜6-10": 3.6,
+            "客胜11-15": 5.7,
+            "客胜16-20": 8.4,
+            "客胜21-25": 14.0,
+            "客胜26+": 15.0
+          },
+          "away_score": 84,
+          "home_score": 91,
+          "total_score": 175,
+          "diff": 7,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "over",
+            "sfc": "主胜6-10"
+          }
+        },
+        {
+          "matchnum": "周六308",
+          "away": "柏林阿尔巴",
+          "home": "奥尔登堡",
+          "league": "",
+          "kickoff": "",
+          "score": "95:77",
+          "ranks": [
+            "第6",
+            "第12"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 1.27,
+            "lose": 2.55
+          },
+          "rfsf": {
+            "line": 5.5,
+            "away_sp": 1.65,
+            "home_sp": 1.75
+          },
+          "dxf": {
+            "line": 163.5,
+            "over_sp": 1.74,
+            "under_sp": 1.66
+          },
+          "sfc": {
+            "客胜1-5": 4.15,
+            "客胜6-10": 3.5,
+            "客胜11-15": 5.15,
+            "客胜16-20": 8.0,
+            "客胜21-25": 12.0,
+            "客胜26+": 13.0
+          },
+          "away_score": 95,
+          "home_score": 77,
+          "total_score": 172,
+          "diff": 18,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "over",
+            "sfc": "客胜16-20"
+          }
+        },
+        {
+          "matchnum": "周六309",
+          "away": "萨拉戈萨",
+          "home": "约文图特",
+          "league": "",
+          "kickoff": "",
+          "score": "94:99",
+          "ranks": [],
+          "settled": true,
+          "sf": {
+            "win": 2.84,
+            "lose": 1.21
+          },
+          "rfsf": {
+            "line": -6.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 177.5,
+            "over_sp": 1.66,
+            "under_sp": 1.74
+          },
+          "sfc": {
+            "客胜1-5": 6.3,
+            "客胜6-10": 6.8,
+            "客胜11-15": 15.0,
+            "客胜16-20": 25.0,
+            "客胜21-25": 34.0,
+            "客胜26+": 50.0
+          },
+          "away_score": 94,
+          "home_score": 99,
+          "total_score": 193,
+          "diff": 5,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "over",
+            "sfc": "主胜1-5"
+          }
+        },
+        {
+          "matchnum": "周六310",
+          "away": "丹佛掘金",
+          "home": "新奥尔良鹈鹕",
+          "league": "",
+          "kickoff": "",
+          "score": "116:108",
+          "ranks": [
+            "西部第7",
+            "西部第13"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 1.02,
+            "lose": 5.05
+          },
+          "rfsf": {
+            "line": 13.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
+          },
+          "dxf": {
+            "line": 237.5,
+            "over_sp": 1.66,
+            "under_sp": 1.74
+          },
+          "sfc": {
+            "客胜1-5": 7.15,
+            "客胜6-10": 4.0,
+            "客胜11-15": 3.6,
+            "客胜16-20": 5.0,
+            "客胜21-25": 6.2,
+            "客胜26+": 4.6
+          },
+          "away_score": 116,
+          "home_score": 108,
+          "total_score": 224,
+          "diff": 8,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "under",
+            "sfc": "客胜6-10"
+          }
+        },
+        {
+          "matchnum": "周六311",
+          "away": "达拉斯独行侠",
+          "home": "克利夫兰骑士",
+          "league": "",
+          "kickoff": "",
+          "score": "117:127",
+          "ranks": [
+            "西部第10",
+            "东部第6"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 1.75,
+            "lose": 1.65
+          },
+          "rfsf": {
+            "line": -1.5,
+            "away_sp": 1.65,
+            "home_sp": 1.75
+          },
+          "dxf": {
+            "line": 232.5,
+            "over_sp": 1.74,
+            "under_sp": 1.66
+          },
+          "sfc": {
+            "客胜1-5": 5.0,
+            "客胜6-10": 5.1,
+            "客胜11-15": 8.3,
+            "客胜16-20": 12.0,
+            "客胜21-25": 20.0,
+            "客胜26+": 21.0
+          },
+          "away_score": 117,
+          "home_score": 127,
+          "total_score": 244,
+          "diff": 10,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "over",
+            "sfc": "主胜6-10"
+          }
+        },
+        {
+          "matchnum": "周六312",
+          "away": "底特律活塞",
+          "home": "迈阿密热火",
+          "league": "",
+          "kickoff": "",
+          "score": "117:137",
+          "ranks": [
+            "东部第3",
+            "东部第5"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 1.4,
+            "lose": 2.15
+          },
+          "rfsf": {
+            "line": 4.5,
+            "away_sp": 1.65,
+            "home_sp": 1.75
+          },
+          "dxf": {
+            "line": 228.5,
+            "over_sp": 1.66,
+            "under_sp": 1.74
+          },
+          "sfc": {
+            "客胜1-5": 4.05,
+            "客胜6-10": 4.2,
+            "客胜11-15": 6.2,
+            "客胜16-20": 8.4,
+            "客胜21-25": 13.0,
+            "客胜26+": 12.0
+          },
+          "away_score": 117,
+          "home_score": 137,
+          "total_score": 254,
+          "diff": 20,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "over",
+            "sfc": "主胜16-20"
+          }
+        },
+        {
+          "matchnum": "周六313",
+          "away": "布鲁克林篮网",
+          "home": "孟菲斯灰熊",
+          "league": "",
+          "kickoff": "",
+          "score": "110:129",
+          "ranks": [
+            "东部第14",
+            "西部第5"
+          ],
+          "settled": true,
+          "sf": {
+            "win": 2.6,
+            "lose": 1.26
+          },
+          "rfsf": {
+            "line": -4.5,
+            "away_sp": 1.75,
+            "home_sp": 1.65
+          },
+          "dxf": {
+            "line": 230.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
+          },
+          "sfc": {
+            "客胜1-5": 6.0,
+            "客胜6-10": 6.2,
+            "客胜11-15": 12.0,
+            "客胜16-20": 16.0,
+            "客胜21-25": 32.0,
+            "客胜26+": 36.0
+          },
+          "away_score": 110,
+          "home_score": 129,
+          "total_score": 239,
+          "diff": 19,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "over",
+            "sfc": "主胜16-20"
+          }
+        },
+        {
+          "matchnum": "周六314",
+          "away": "芝加哥公牛",
+          "home": "明尼苏达森林狼",
+          "league": "",
+          "kickoff": "",
+          "score": "117:106",
+          "ranks": [
+            "东部第13",
+            "西部第6"
+          ],
+          "settled": true,
+          "sf": {
+            "win": null,
+            "lose": null
+          },
+          "rfsf": {
+            "line": -15.5,
+            "away_sp": 1.75,
+            "home_sp": 1.65
+          },
+          "dxf": {
+            "line": 235.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
+          },
+          "sfc": {
+            "客胜1-5": 20.0,
+            "客胜6-10": 22.0,
+            "客胜11-15": 36.0,
+            "客胜16-20": 45.0,
+            "客胜21-25": 100.0,
+            "客胜26+": 120.0
+          },
+          "away_score": 117,
+          "home_score": 106,
+          "total_score": 223,
+          "diff": 11,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "home_win",
+            "dxf": "under",
+            "sfc": "客胜11-15"
           }
         }
       ]
     }
   },
   "days_order": [
+    "2026-11-20",
     "2026-11-19",
-    "2026-11-18"
+    "2026-11-18",
+    "2026-11-17",
+    "2026-11-16",
+    "2026-11-15",
+    "2026-11-14"
   ]
 }
