@@ -1,0 +1,29 @@
+name: 篮球抓取出口测试
+on:
+  workflow_dispatch:
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 测试500篮球页可达性
+        run: |
+          echo "=== 测试多个篮球数据源 ==="
+          for u in \
+            "https://trade.500.com/jclq/?date=2026-11-18&g=2&playid=275" \
+            "https://www.sporttery.cn/jc/lqsgkj/?end_date=2026-11-18&start_date=2026-11-18" \
+            "https://live.500.com/jczq.php?e=2026-11-18"; do
+            echo "--- $u"
+            curl -s -m 20 -o /tmp/p.html -w "http=%{http_code} size=%{size_download}\n" \
+              -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0 Safari/537.36" \
+              -e "https://www.500.com/" "$u" || echo "curl failed"
+            python3 -c "
+import re
+try:
+    t=open('/tmp/p.html',encoding='gb18030',errors='replace').read()
+except Exception:
+    t=''
+print('  betC=%d 周=%d 301=%d preview=%s'%(t.count('betC'),t.count('周'),t.count('301'),repr(t[:80])))
+"
+          done
+          echo "=== 测试外部出口(对比足球已知可通的路径) ==="
+          curl -s -m 20 -o /dev/null -w "trade.500.com -> http=%{http_code}\n" "https://trade.500.com/" || echo "fail"
