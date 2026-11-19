@@ -1,0 +1,66 @@
+name: 每日竞彩篮球数据抓取
+
+on:
+  schedule:
+    - cron: '0 22 * * *'
+    - cron: '0 4 * * *'
+    - cron: '0 10 * * *'
+    - cron: '0 16 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-basketball
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      SITE_PASS: \${{ secrets.SITE_PASS }}
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+
+      - name: 安装依赖
+        run: |
+          python3 -m pip install --quiet requests
+          python3 -m pip install --quiet cryptography
+
+      - name: 抓取竞彩篮球赛程/赔率/赛果并加密输出
+        run: python3 fetch_basketball.py
+
+      - name: 有变化才提交
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          rm -f basketball.json
+          if git diff --quiet -- basketball.enc; then
+            echo "篮球加密数据无变化，跳过提交"
+          else
+            git add basketball.enc
+            git commit -m "自动更新加密竞彩篮球数据 \$(date -u +%Y-%m-%dT%H:%MZ)"
+            git pull --rebase origin main
+            git push
+          fi
+
+      - name: 输出统计
+        run: |
+          python3 - <<'PY'
+          import sys, os
+          try:
+              from fetch_basketball import safe_load
+          except ImportError:
+              print("脚本未就绪"); raise SystemExit(0)
+          d = safe_load('basketball.enc')
+          if not d:
+              print('本轮未产生可用篮球加密数据（SITE_PASS 是否配置？）')
+              raise SystemExit(0)
+          print('更新时间:', d.get('updated_at'), '| 数据源:', d.get('source'))
+          for x in d.get('days', {}).values():
+              settled = sum(1 for m in x['matches'] if m.get('settled'))
+              print('  %s %d 场，已开奖 %d 场' % (x['date'], x['count'], settled))
+          PY
