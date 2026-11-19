@@ -1,0 +1,47 @@
+
+name: 篮球页面下载
+on:
+  workflow_dispatch:
+  push:
+    paths: ['.github/workflows/basketball_fetch.yml']
+jobs:
+  dl:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: 下载篮球页面
+        run: |
+          python3 - << 'PY'
+          import urllib.request, re, json, os
+          HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0 Safari/537.36', 'Referer': 'https://www.500.com/'}
+          pages = {}
+          for playid, name in [('313','胜负'),('275','让分胜负'),('281','大小分'),('291','胜分差')]:
+              u = f'https://trade.500.com/jclq/?date=2026-11-18&g=2&playid={playid}'
+              try:
+                  req = urllib.request.Request(u, headers=HEADERS)
+                  with urllib.request.urlopen(req, timeout=25) as r:
+                      raw = r.read()
+                  try: t = raw.decode('gb18030', errors='replace')
+                  except: t = raw.decode('utf-8', errors='replace')
+                  pages[name] = t
+                  print(f'{name}: {len(t)} bytes, 周={t.count(chr(0x5468))}, tr={t.count(chr(60)+"tr")}')
+              except Exception as e:
+                  pages[name] = f'ERROR: {e}'
+                  print(f'{name}: ERROR {e}')
+          os.makedirs('basketball_pages', exist_ok=True)
+          for k,v in pages.items():
+              with open(f'basketball_pages/{k}.html','w',encoding='utf-8') as f:
+                  f.write(v if isinstance(v,str) else '')
+          # 保存一个原始让分胜负的页面用于分析结构
+          with open('basketball_pages/_analyze.html','w',encoding='utf-8') as f:
+              f.write(pages.get('让分胜负',''))
+          PY
+      - name: 提交
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.com"
+          git add basketball_pages/
+          git commit -m "篮球真实页面下载 $(date -u +%H:%M:%SZ)" || echo "no changes"
+          git push
