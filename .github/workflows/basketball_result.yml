@@ -1,0 +1,37 @@
+name: 篮球赛果回填
+
+on:
+  schedule:
+    - cron: '30 8 * * *'
+    - cron: '30 14 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: basketball-result
+  cancel-in-progress: true
+
+jobs:
+  fill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+
+      - name: 抓取500赛果并回填
+        run: python3 scripts/fill_results.py
+
+      - name: 加密并推送
+        run: |
+          if [ -f encrypt_basketball.py ]; then
+            python3 encrypt_basketball.py
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.com"
+          git add basketball.json basketball.enc
+          git commit -m "自动回填赛果 $(date -u +%Y-%m-%dT%H:%MZ)" || echo "无变化"
+          git pull --rebase origin main
+          git push
