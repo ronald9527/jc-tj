@@ -1,0 +1,33 @@
+{
+  "https://trade.500.com/jclq/?date=2026-11-18&g=2&playid=275": {
+    "ok": true,
+    "bytes": 104053,
+    "betC": 0,
+    "week": 43,
+    "num301": 4,
+    "tr": 36,
+    "jclq": 22
+  },
+  "https://trade.500.com/jclq/?date=2026-11-18&g=1&playid=313": {
+    "ok": true,
+    "bytes": 124577,
+    "betC": 0,
+    "week": 43,
+    "num301": 4,
+    "tr": 78,
+    "jclq": 22
+  },
+  "https://www.sporttery.cn/jc/lqsgkj/?end_date=2026-11-18&start_date=2026-11-18": {
+    "ok": false,
+    "error": "HTTP Error 567: Unknown Status"
+  },
+  "https://live.500.com/jczq.php?e=2026-11-18": {
+    "ok": true,
+    "bytes": 49044,
+    "betC": 0,
+    "week": 4,
+    "num301": 1,
+    "tr": 21,
+    "jclq": 5
+  }
+}
