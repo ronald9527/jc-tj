@@ -2,7 +2,7 @@
   "v": 1,
   "real": true,
   "source": "500彩票网竞彩篮球（国内数据）",
-  "updated_at": "2026-11-20 09:35:45",
+  "updated_at": "2026-11-20 10:52:55",
   "days": {
     "2026-11-19": {
       "date": "2026-11-19",
@@ -57,9 +57,9 @@
           "home": "拜仁慕尼黑",
           "league": "",
           "kickoff": "",
-          "score": "",
+          "score": "81:100",
           "ranks": [],
-          "settled": false,
+          "settled": true,
           "sf": {
             "win": 3.24,
             "lose": 1.15
@@ -81,6 +81,16 @@
             "客胜16-20": 25.0,
             "客胜21-25": 34.0,
             "客胜26+": 50.0
+          },
+          "away_score": 81,
+          "home_score": 100,
+          "total_score": 181,
+          "diff": 19,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "over",
+            "sfc": "主胜16-20"
           }
         },
         {
@@ -89,9 +99,9 @@
           "home": "米兰",
           "league": "",
           "kickoff": "",
-          "score": "",
+          "score": "70:78",
           "ranks": [],
-          "settled": false,
+          "settled": true,
           "sf": {
             "win": 1.26,
             "lose": 2.6
@@ -113,6 +123,16 @@
             "客胜16-20": 9.0,
             "客胜21-25": 14.0,
             "客胜26+": 16.0
+          },
+          "away_score": 70,
+          "home_score": 78,
+          "total_score": 148,
+          "diff": 8,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "under",
+            "sfc": "主胜6-10"
           }
         },
         {
@@ -121,9 +141,9 @@
           "home": "巴伦西亚",
           "league": "",
           "kickoff": "",
-          "score": "",
+          "score": "87:92",
           "ranks": [],
-          "settled": false,
+          "settled": true,
           "sf": {
             "win": 4.4,
             "lose": 1.05
@@ -145,6 +165,16 @@
             "客胜16-20": 38.0,
             "客胜21-25": 53.0,
             "客胜26+": 80.0
+          },
+          "away_score": 87,
+          "home_score": 92,
+          "total_score": 179,
+          "diff": 5,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "under",
+            "sfc": "主胜1-5"
           }
         },
         {
