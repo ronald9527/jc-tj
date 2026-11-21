@@ -2,7 +2,7 @@
   "v": 1,
   "real": true,
   "source": "500彩票网竞彩篮球（国内数据）",
-  "updated_at": "2026-11-21 13:26:43",
+  "updated_at": "2026-11-21 17:30:02",
   "days": {
     "2026-11-21": {
       "date": "2026-11-21",
@@ -15,9 +15,9 @@
           "home": "塔斯马尼亚跳蚁",
           "league": "",
           "kickoff": "",
-          "score": "",
+          "score": "82:95",
           "ranks": [],
-          "settled": false,
+          "settled": true,
           "sf": {
             "win": 2.34,
             "lose": 1.33
@@ -28,17 +28,27 @@
             "home_sp": 1.7
           },
           "dxf": {
-            "line": 194.5,
+            "line": 192.5,
             "over_sp": 1.66,
             "under_sp": 1.74
           },
           "sfc": {
             "客胜1-5": 5.7,
             "客胜6-10": 6.8,
-            "客胜11-15": 12.0,
-            "客胜16-20": 16.0,
+            "客胜11-15": 10.5,
+            "客胜16-20": 14.5,
             "客胜21-25": 28.0,
-            "客胜26+": 30.0
+            "客胜26+": 26.0
+          },
+          "away_score": 82,
+          "home_score": 95,
+          "total_score": 177,
+          "diff": 13,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "under",
+            "sfc": "主胜11-15"
           }
         },
         {
@@ -51,26 +61,26 @@
           "ranks": [],
           "settled": false,
           "sf": {
-            "win": 2.78,
-            "lose": 1.22
+            "win": 3.15,
+            "lose": 1.16
           },
           "rfsf": {
             "line": -7.5,
-            "away_sp": 1.75,
-            "home_sp": 1.65
+            "away_sp": 1.7,
+            "home_sp": 1.7
           },
           "dxf": {
-            "line": 186.5,
-            "over_sp": 1.66,
-            "under_sp": 1.74
+            "line": 187.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
           },
           "sfc": {
-            "客胜1-5": 5.5,
-            "客胜6-10": 8.4,
-            "客胜11-15": 19.0,
-            "客胜16-20": 23.0,
-            "客胜21-25": 33.0,
-            "客胜26+": 32.0
+            "客胜1-5": 5.6,
+            "客胜6-10": 9.0,
+            "客胜11-15": 17.0,
+            "客胜16-20": 26.0,
+            "客胜21-25": 36.0,
+            "客胜26+": 35.0
           }
         },
         {
@@ -95,7 +105,7 @@
             "home_sp": 1.7
           },
           "dxf": {
-            "line": 168.5,
+            "line": 169.5,
             "over_sp": 1.7,
             "under_sp": 1.7
           },
@@ -123,13 +133,13 @@
           },
           "rfsf": {
             "line": 5.5,
-            "away_sp": 1.7,
-            "home_sp": 1.7
+            "away_sp": 1.65,
+            "home_sp": 1.75
           },
           "dxf": {
             "line": 179.5,
-            "over_sp": 1.7,
-            "under_sp": 1.7
+            "over_sp": 1.66,
+            "under_sp": 1.74
           },
           "sfc": {
             "客胜1-5": 4.1,
@@ -197,7 +207,7 @@
             "home_sp": 1.65
           },
           "dxf": {
-            "line": 229.5,
+            "line": 230.5,
             "over_sp": 1.66,
             "under_sp": 1.74
           },
@@ -225,13 +235,13 @@
           },
           "rfsf": {
             "line": -5.5,
-            "away_sp": 1.75,
-            "home_sp": 1.65
+            "away_sp": 1.81,
+            "home_sp": 1.6
           },
           "dxf": {
             "line": 185.5,
-            "over_sp": 1.66,
-            "under_sp": 1.74
+            "over_sp": 1.62,
+            "under_sp": 1.78
           },
           "sfc": {
             "客胜1-5": 6.3,
@@ -263,7 +273,7 @@
             "home_sp": 1.65
           },
           "dxf": {
-            "line": 182.5,
+            "line": 183.5,
             "over_sp": 1.66,
             "under_sp": 1.74
           },
@@ -326,8 +336,8 @@
           },
           "rfsf": {
             "line": -6.5,
-            "away_sp": 1.7,
-            "home_sp": 1.7
+            "away_sp": 1.75,
+            "home_sp": 1.65
           },
           "dxf": {
             "line": 180.5,
@@ -356,18 +366,18 @@
           ],
           "settled": false,
           "sf": {
-            "win": 2.48,
-            "lose": 1.29
+            "win": 2.64,
+            "lose": 1.25
           },
           "rfsf": {
             "line": -5.5,
-            "away_sp": 1.75,
-            "home_sp": 1.65
+            "away_sp": 1.81,
+            "home_sp": 1.6
           },
           "dxf": {
-            "line": 218.5,
-            "over_sp": 1.66,
-            "under_sp": 1.74
+            "line": 219.5,
+            "over_sp": 1.7,
+            "under_sp": 1.7
           },
           "sfc": {
             "客胜1-5": 5.9,
@@ -391,18 +401,18 @@
           ],
           "settled": false,
           "sf": {
-            "win": 2.48,
-            "lose": 1.29
+            "win": 2.64,
+            "lose": 1.25
           },
           "rfsf": {
-            "line": -5.5,
-            "away_sp": 1.81,
-            "home_sp": 1.6
+            "line": -7.5,
+            "away_sp": 1.7,
+            "home_sp": 1.7
           },
           "dxf": {
-            "line": 228.5,
-            "over_sp": 1.62,
-            "under_sp": 1.78
+            "line": 230.5,
+            "over_sp": 1.66,
+            "under_sp": 1.74
           },
           "sfc": {
             "客胜1-5": 5.9,
@@ -431,18 +441,18 @@
           },
           "rfsf": {
             "line": -15.5,
-            "away_sp": 1.7,
-            "home_sp": 1.7
+            "away_sp": 1.75,
+            "home_sp": 1.65
           },
           "dxf": {
-            "line": 227.5,
-            "over_sp": 1.62,
-            "under_sp": 1.78
+            "line": 229.5,
+            "over_sp": 1.66,
+            "under_sp": 1.74
           },
           "sfc": {
             "客胜1-5": 20.0,
             "客胜6-10": 26.0,
-            "客胜11-15": 52.0,
+            "客胜11-15": 40.0,
             "客胜16-20": 65.0,
             "客胜21-25": 140.0,
             "客胜26+": 160.0
@@ -456,21 +466,21 @@
           "kickoff": "",
           "score": "",
           "ranks": [
-            "西部第4",
+            "西部第3",
             "西部第5"
           ],
           "settled": false,
           "sf": {
-            "win": 2.64,
-            "lose": 1.25
+            "win": 2.48,
+            "lose": 1.29
           },
           "rfsf": {
             "line": -5.5,
-            "away_sp": 1.75,
-            "home_sp": 1.65
+            "away_sp": 1.65,
+            "home_sp": 1.75
           },
           "dxf": {
-            "line": 228.5,
+            "line": 229.5,
             "over_sp": 1.66,
             "under_sp": 1.74
           },
@@ -506,8 +516,8 @@
           },
           "dxf": {
             "line": 217.5,
-            "over_sp": 1.7,
-            "under_sp": 1.7
+            "over_sp": 1.66,
+            "under_sp": 1.74
           },
           "sfc": {
             "客胜1-5": 7.6,
@@ -954,9 +964,9 @@
           "home": "芝加哥公牛",
           "league": "",
           "kickoff": "",
-          "score": "",
+          "score": "98:94",
           "ranks": [],
-          "settled": false,
+          "settled": true,
           "sf": {
             "win": 1.92,
             "lose": 1.52
@@ -978,6 +988,16 @@
             "客胜16-20": 16.0,
             "客胜21-25": 24.0,
             "客胜26+": 32.0
+          },
+          "away_score": 98,
+          "home_score": 94,
+          "total_score": 192,
+          "diff": 4,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "under",
+            "sfc": "客胜1-5"
           }
         },
         {
@@ -986,9 +1006,9 @@
           "home": "俄克拉荷马城雷霆",
           "league": "",
           "kickoff": "",
-          "score": "",
+          "score": "120:126",
           "ranks": [],
-          "settled": false,
+          "settled": true,
           "sf": {
             "win": 5.05,
             "lose": 1.02
@@ -1010,6 +1030,16 @@
             "客胜16-20": 35.0,
             "客胜21-25": 62.0,
             "客胜26+": 78.0
+          },
+          "away_score": 120,
+          "home_score": 126,
+          "total_score": 246,
+          "diff": 6,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "over",
+            "sfc": "主胜6-10"
           }
         },
         {
@@ -1018,9 +1048,9 @@
           "home": "犹他爵士",
           "league": "",
           "kickoff": "",
-          "score": "",
+          "score": "111:101",
           "ranks": [],
-          "settled": false,
+          "settled": true,
           "sf": {
             "win": 1.29,
             "lose": 2.48
@@ -1042,6 +1072,16 @@
             "客胜16-20": 8.7,
             "客胜21-25": 14.0,
             "客胜26+": 16.0
+          },
+          "away_score": 111,
+          "home_score": 101,
+          "total_score": 212,
+          "diff": 10,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "away_win",
+            "dxf": "under",
+            "sfc": "客胜6-10"
           }
         },
         {
@@ -1050,9 +1090,9 @@
           "home": "洛杉矶湖人",
           "league": "",
           "kickoff": "",
-          "score": "",
+          "score": "104:106",
           "ranks": [],
-          "settled": false,
+          "settled": true,
           "sf": {
             "win": null,
             "lose": null
@@ -1074,6 +1114,16 @@
             "客胜16-20": 52.0,
             "客胜21-25": 90.0,
             "客胜26+": 100.0
+          },
+          "away_score": 104,
+          "home_score": 106,
+          "total_score": 210,
+          "diff": 2,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "under",
+            "sfc": "主胜1-5"
           }
         },
         {
@@ -1082,9 +1132,9 @@
           "home": "丹佛掘金",
           "league": "",
           "kickoff": "",
-          "score": "",
+          "score": "124:133",
           "ranks": [],
-          "settled": false,
+          "settled": true,
           "sf": {
             "win": 1.75,
             "lose": 1.65
@@ -1106,6 +1156,16 @@
             "客胜16-20": 12.5,
             "客胜21-25": 21.0,
             "客胜26+": 22.0
+          },
+          "away_score": 124,
+          "home_score": 133,
+          "total_score": 257,
+          "diff": 9,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "over",
+            "sfc": "主胜6-10"
           }
         }
       ]
