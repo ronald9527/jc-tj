@@ -2,109 +2,13 @@
   "v": 1,
   "real": true,
   "source": "500彩票网竞彩篮球（国内数据）",
-  "updated_at": "2026-11-21 09:01:11",
+  "updated_at": "2026-11-21 11:00:43",
   "days": {
     "2026-11-21": {
       "date": "2026-11-21",
       "weekday": "六",
-      "count": 5,
+      "count": 2,
       "matches": [
-        {
-          "matchnum": "周五311",
-          "away": "华盛顿奇才",
-          "home": "芝加哥公牛",
-          "league": "",
-          "kickoff": "",
-          "score": "",
-          "ranks": [],
-          "settled": false,
-          "sf": {
-            "win": 1.92,
-            "lose": 1.52
-          },
-          "rfsf": {
-            "line": -3.5,
-            "away_sp": 1.7,
-            "home_sp": 1.7
-          },
-          "dxf": {
-            "line": 241.5,
-            "over_sp": 1.7,
-            "under_sp": 1.7
-          },
-          "sfc": {
-            "客胜1-5": 4.8,
-            "客胜6-10": 5.0,
-            "客胜11-15": 10.5,
-            "客胜16-20": 16.0,
-            "客胜21-25": 24.0,
-            "客胜26+": 32.0
-          }
-        },
-        {
-          "matchnum": "周五312",
-          "away": "新奥尔良鹈鹕",
-          "home": "俄克拉荷马城雷霆",
-          "league": "",
-          "kickoff": "",
-          "score": "",
-          "ranks": [],
-          "settled": false,
-          "sf": {
-            "win": 5.05,
-            "lose": 1.02
-          },
-          "rfsf": {
-            "line": -12.5,
-            "away_sp": 1.75,
-            "home_sp": 1.65
-          },
-          "dxf": {
-            "line": 229.5,
-            "over_sp": 1.66,
-            "under_sp": 1.74
-          },
-          "sfc": {
-            "客胜1-5": 11.0,
-            "客胜6-10": 13.0,
-            "客胜11-15": 23.0,
-            "客胜16-20": 35.0,
-            "客胜21-25": 62.0,
-            "客胜26+": 78.0
-          }
-        },
-        {
-          "matchnum": "周五313",
-          "away": "菲尼克斯太阳",
-          "home": "犹他爵士",
-          "league": "",
-          "kickoff": "",
-          "score": "",
-          "ranks": [],
-          "settled": false,
-          "sf": {
-            "win": 1.29,
-            "lose": 2.48
-          },
-          "rfsf": {
-            "line": 6.5,
-            "away_sp": 1.7,
-            "home_sp": 1.7
-          },
-          "dxf": {
-            "line": 227.5,
-            "over_sp": 1.66,
-            "under_sp": 1.74
-          },
-          "sfc": {
-            "客胜1-5": 4.0,
-            "客胜6-10": 3.9,
-            "客胜11-15": 6.0,
-            "客胜16-20": 8.7,
-            "客胜21-25": 14.0,
-            "客胜26+": 16.0
-          }
-        },
         {
           "matchnum": "周五314",
           "away": "萨克拉门托国王",
@@ -224,9 +128,9 @@
           "home": "伊斯坦布尔埃菲斯",
           "league": "",
           "kickoff": "",
-          "score": "",
+          "score": "81:107",
           "ranks": [],
-          "settled": false,
+          "settled": true,
           "sf": {
             "win": 3.24,
             "lose": 1.15
@@ -248,6 +152,16 @@
             "客胜16-20": 28.0,
             "客胜21-25": 40.0,
             "客胜26+": 58.0
+          },
+          "away_score": 81,
+          "home_score": 107,
+          "total_score": 188,
+          "diff": 26,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "over",
+            "sfc": "主胜26+"
           }
         },
         {
@@ -291,9 +205,9 @@
           "home": "奥林匹亚科斯",
           "league": "",
           "kickoff": "",
-          "score": "",
+          "score": "76:92",
           "ranks": [],
-          "settled": false,
+          "settled": true,
           "sf": {
             "win": 1.86,
             "lose": 1.56
@@ -315,6 +229,16 @@
             "客胜16-20": 15.0,
             "客胜21-25": 24.0,
             "客胜26+": 30.0
+          },
+          "away_score": 76,
+          "home_score": 92,
+          "total_score": 168,
+          "diff": 16,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "under",
+            "sfc": "主胜16-20"
           }
         },
         {
@@ -323,9 +247,9 @@
           "home": "巴塞罗那",
           "league": "",
           "kickoff": "",
-          "score": "",
+          "score": "103:100",
           "ranks": [],
-          "settled": false,
+          "settled": true,
           "sf": {
             "win": 2.18,
             "lose": 1.39
@@ -347,6 +271,16 @@
             "客胜16-20": 18.0,
             "客胜21-25": 27.0,
             "客胜26+": 36.0
+          },
+          "away_score": 103,
+          "home_score": 100,
+          "total_score": 203,
+          "diff": 3,
+          "result": {
+            "sf": "away_win",
+            "rfsf": "home_win",
+            "dxf": "over",
+            "sfc": "客胜1-5"
           }
         },
         {
@@ -355,9 +289,9 @@
           "home": "贝尔格莱德游击",
           "league": "",
           "kickoff": "",
-          "score": "",
+          "score": "87:91",
           "ranks": [],
-          "settled": false,
+          "settled": true,
           "sf": {
             "win": 2.23,
             "lose": 1.37
@@ -379,6 +313,16 @@
             "客胜16-20": 22.0,
             "客胜21-25": 31.0,
             "客胜26+": 44.0
+          },
+          "away_score": 87,
+          "home_score": 91,
+          "total_score": 178,
+          "diff": 4,
+          "result": {
+            "sf": "home_win",
+            "rfsf": "home_win",
+            "dxf": "over",
+            "sfc": "主胜1-5"
           }
         },
         {
